@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WhisperHack · 科技观察与构建实验室" />
+  <title>WhisperHack · Tech Field Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <div class="background-grid" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="logo">WhisperHack</div>
+    <nav class="nav">
+      <a href="#focus">焦点</a>
+      <a href="#signals">最新信号</a>
+      <a href="#roadmap">路线图</a>
+      <a href="#about">关于</a>
+    </nav>
+    <button class="cta ghost">订阅更新</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Tech Journal · 2025</p>
+        <h1>记录一切关于 AI × Infra × Future Interfaces 的实验与洞察。</h1>
+        <p class="lede">
+          这是一个可持续迭代的数字实验室：一部分是公开的研究手记，一部分是长期构建项目，
+          通过结构化的内容卡和路线图，让每次更新都可追踪、可验证、可复制。
+        </p>
+        <div class="hero-actions">
+          <a class="cta" href="#signals">浏览最新</a>
+          <a class="cta secondary" href="posts/post.html?slug=designing-synthetic-senses">随机阅读</a>
+        </div>
+      </div>
+      <article class="hero-card">
+        <header>
+          <p class="card-label">Live Metrics</p>
+          <span class="badge">alpha stream</span>
+        </header>
+        <ul>
+          <li>
+            <p class="metric" id="metric-published">0</p>
+            <p class="caption">已发布研究</p>
+          </li>
+          <li>
+            <p class="metric" id="metric-building">0</p>
+            <p class="caption">在建项目</p>
+          </li>
+          <li>
+            <p class="metric" id="metric-monthly">+0</p>
+            <p class="caption">本月增量</p>
+          </li>
+        </ul>
+        <footer>
+          <p>数据实时映射 content/posts.json，更新内容即可自动同步。</p>
+        </footer>
+      </article>
+    </section>
+
+    <section id="focus" class="section">
+      <header class="section-header">
+        <h2>焦点实验</h2>
+        <p>精选长篇或构建日志，映射当前最投入的方向。</p>
+      </header>
+      <div id="featured-grid" class="card-grid"></div>
+    </section>
+
+    <section id="signals" class="section">
+      <header class="section-header">
+        <div>
+          <h2>最新信号</h2>
+          <p>以时间顺序呈现最近的想法、研究与工程更新。</p>
+        </div>
+        <div class="pills" role="tablist">
+          <button class="pill active" data-filter="all">全部</button>
+          <button class="pill" data-filter="ai">AI</button>
+          <button class="pill" data-filter="infra">Infra</button>
+          <button class="pill" data-filter="design">Design</button>
+        </div>
+      </header>
+      <div id="latest-list" class="latest-list"></div>
+    </section>
+
+    <section id="roadmap" class="section">
+      <header class="section-header">
+        <h2>路线图</h2>
+        <p>公开性的构建进度表，方便追踪下一步迭代。</p>
+      </header>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <section id="about" class="section two-column">
+      <article>
+        <h3>关于我</h3>
+        <p>
+          WhisperHack 是一个在边界条件下摸索未来人机协作模式的长期项目。我关注
+          AI 原生接口、感知基础设施和自治工具链，习惯以可复现的实验方式验证假设。
+        </p>
+        <p>
+          这个站点采用数据驱动的内容层：Markdown × JSON。写作与维护被拆分为
+          “只写内容” 与 “自动排版” 两部分，避免因为美术或组件调整而阻塞发布节奏。
+        </p>
+      </article>
+      <article class="panel">
+        <h3>订阅路径</h3>
+        <p>最新内容会同步到 GitHub Pages。也可以通过以下方式获取增量：</p>
+        <ul>
+          <li>RSS: <code>/feed.xml</code>（可拓展）</li>
+          <li>GitHub Discussions · <a href="https://github.com/WhisperHack" target="_blank" rel="noreferrer">@WhisperHack</a></li>
+          <li>Newsletter（占位）：可对接 Buttondown / Substack</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> WhisperHack · Built for GitHub Pages.</p>
+    <p class="footnote">Design system: glass morphism + neon grid · 数据驱动内容。</p>
+  </footer>
+
+  <script src="assets/js/main.js" type="module"></script>
+</body>
+</html>

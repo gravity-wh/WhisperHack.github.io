@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "synthetic-signal-stack",
+    "title": "Synthetic Signal Stack：在人机共感里的多模态底座",
+    "date": "2025-10-26",
+    "summary": "记录一个旨在统一语义、触觉与环境感知信号的实验堆栈，并验证其在 AI 原生接口中的响应延迟与能耗表现。",
+    "tags": ["AI", "Infra"],
+    "readingTime": "8 min",
+    "featured": true,
+    "status": "shipped",
+    "phase": "ship",
+    "roadmap": {
+      "phase": "Deploy",
+      "eta": "2025 Q4",
+      "focus": "Open-sourcing sensing bridge",
+      "note": "将多模态信号桥接协议与 UI 套件整合，提供云端 + 边缘双模式对接。",
+      "order": 2
+    }
+  },
+  {
+    "slug": "designing-synthetic-senses",
+    "title": "Designing Synthetic Senses · 接往未来界面",
+    "date": "2025-11-08",
+    "summary": "以“感官合成器”为原型，追踪如何在纯软件环境里模拟真实触觉/温度反馈，并通过 LLM 生成的接口指令控制硬件中枢。",
+    "tags": ["Design", "AI"],
+    "readingTime": "6 min",
+    "featured": true,
+    "status": "building",
+    "phase": "build",
+    "roadmap": {
+      "phase": "Build",
+      "eta": "2026 Q1",
+      "focus": "LLM-native interface kit",
+      "note": "完成虚拟原型 + Figma 插件，并开放 API 供第三方指令集接入。",
+      "order": 1
+    }
+  },
+  {
+    "slug": "infra-garden-log",
+    "title": "Infra Garden Log · 低功耗自治节点",
+    "date": "2025-09-18",
+    "summary": "一份以园艺比喻解释分布式推理集群调度策略的日志，涵盖边缘节点健康监控以及 WhisperHack 实验云的布署方式。",
+    "tags": ["Infra"],
+    "readingTime": "5 min",
+    "featured": false,
+    "status": "shipped",
+    "phase": "ship",
+    "roadmap": {
+      "phase": "Observe",
+      "eta": "2025 Q3",
+      "focus": "Thermal aware autoscaling",
+      "note": "将温控策略抽象为策略引擎，供本地集群复用。",
+      "order": 3
+    }
+  }
+]
