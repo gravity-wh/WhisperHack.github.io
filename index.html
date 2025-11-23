@@ -62,7 +62,7 @@
               </div>
               <div>
                 <p>当前频段</p>
-                <strong>98.7 MHz</strong>
+                <strong id="current-frequency">98.7 MHz</strong>
               </div>
               <div>
                 <p>编号</p>
@@ -70,16 +70,16 @@
               </div>
             </div>
           </div>
-          <div class="sr-hero__dial" aria-hidden="true">
+          <div class="sr-hero__dial" role="region" aria-label="虚拟调频波轮">
             <div class="sr-dial__scale">
               <span>88.0</span>
               <span>108.0</span>
             </div>
-            <div class="sr-dial__track">
-              <div class="sr-dial__ticks"></div>
-              <span class="sr-dial__needle"></span>
+            <div class="sr-dial__track" id="dial-track" tabindex="0" aria-label="滚动调节频率">
+              <div class="sr-dial__ticks" aria-hidden="true"></div>
+              <span class="sr-dial__needle" id="dial-needle" aria-hidden="true"></span>
             </div>
-            <p class="sr-dial__status">正在接收信号...</p>
+            <p class="sr-dial__status" id="dial-status">正在接收信号...</p>
           </div>
         </div>
       </section>

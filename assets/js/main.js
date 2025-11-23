@@ -1,5 +1,10 @@
 const POSTS_ENDPOINT = "content/posts.json";
 const AUDIO_ENDPOINT = "content/audio.json";
+const LOCAL_AUDIO_BASE = "content/audio/";
+const RADIO_DEFAULT_FREQUENCY = "98.7 MHz";
+const INITIAL_DIAL_FREQUENCY = 98.7;
+const RADIO_DEFAULT_SEGMENT = "Sunset Radio";
+const RADIO_DEFAULT_HOST = "DJ Whisper";
 
 const CATEGORY_CONFIG = [
   { id: "all", label: "全部信号", icon: "📡" },
@@ -29,7 +34,10 @@ const dom = {
   signalCounter: document.getElementById("signal-counter"),
   navToggle: document.querySelector("[data-mobile-toggle]"),
   navMenu: document.querySelector("[data-mobile-menu]"),
-  logoButton: document.querySelector("[data-logo]")
+  logoButton: document.querySelector("[data-logo]"),
+  currentFrequency: document.getElementById("current-frequency"),
+  dialStatus: document.getElementById("dial-status"),
+  dialTrack: document.getElementById("dial-track")
 };
 
 const audioElements = {
@@ -47,7 +55,18 @@ const audioState = {
   playlist: [],
   currentIndex: 0,
   isPlaying: false,
-  isSeeking: false
+  isSeeking: false,
+  introTimers: []
+};
+
+const dialState = {
+  min: 88,
+  max: 108,
+  step: 0.1,
+  frequency: INITIAL_DIAL_FREQUENCY,
+  postsByFrequency: new Map(),
+  availableFrequencies: [],
+  hasSnapped: false
 };
 
 init();
@@ -55,6 +74,7 @@ init();
 async function init() {
   renderCategories();
   bindEventListeners();
+  setupDial();
 
   await Promise.allSettled([loadPosts(), loadPlaylist()]);
 }
@@ -152,6 +172,102 @@ function bindEventListeners() {
   audioElements.audio?.addEventListener("ended", playNextTrack);
 }
 
+function setupDial() {
+  if (!dom.dialTrack) return;
+  dom.dialTrack.addEventListener("wheel", handleDialScroll, { passive: false });
+  dom.dialTrack.addEventListener("keydown", handleDialKeydown);
+  updateDialUI();
+}
+
+function handleDialScroll(event) {
+  event.preventDefault();
+  const delta = event.deltaY || event.deltaX || 0;
+  if (!delta) return;
+  const direction = delta > 0 ? -1 : 1;
+  const multiplier = event.shiftKey ? 5 : 1;
+  setDialFrequency(dialState.frequency + direction * dialState.step * multiplier);
+}
+
+function handleDialKeydown(event) {
+  const keyMap = {
+    ArrowRight: dialState.step,
+    ArrowUp: dialState.step,
+    ArrowLeft: -dialState.step,
+    ArrowDown: -dialState.step,
+    PageUp: dialState.step * 5,
+    PageDown: -dialState.step * 5
+  };
+
+  if (event.key === "Home") {
+    event.preventDefault();
+    setDialFrequency(dialState.min);
+    return;
+  }
+
+  if (event.key === "End") {
+    event.preventDefault();
+    setDialFrequency(dialState.max);
+    return;
+  }
+
+  const increment = keyMap[event.key];
+  if (increment) {
+    event.preventDefault();
+    setDialFrequency(dialState.frequency + increment);
+  }
+}
+
+function setDialFrequency(value, options = {}) {
+  const clamped = clamp(value, dialState.min, dialState.max);
+  const rounded = Number(clamped.toFixed(1));
+  const frequencyChanged = rounded !== dialState.frequency;
+  dialState.frequency = rounded;
+  if (!options.silent && (frequencyChanged || options.force)) {
+    updateDialUI();
+  } else if (!options.silent && !frequencyChanged) {
+    updateDialStatus(rounded.toFixed(1));
+  }
+}
+
+function updateDialUI() {
+  const freqString = dialState.frequency.toFixed(1);
+  if (dom.currentFrequency) {
+    dom.currentFrequency.textContent = `${freqString} MHz`;
+  }
+  if (dom.dialTrack) {
+    const percent = (dialState.frequency - dialState.min) / (dialState.max - dialState.min);
+    dom.dialTrack.style.setProperty("--needle-position", `${percent * 100}%`);
+    dom.dialTrack.style.setProperty("--dial-shift", `${(0.5 - percent) * 60}%`);
+  }
+  updateDialStatus(freqString);
+}
+
+function updateDialStatus(freqString) {
+  if (!dom.dialStatus) return;
+  const posts = dialState.postsByFrequency.get(freqString);
+  if (posts && posts.length) {
+    const [primary] = posts;
+    const extras = posts.length > 1 ? ` · +${posts.length - 1} 篇待播` : "";
+    const preview = truncateText(primary.summary || primary.title, 68);
+    setDialStatusText(`正在接收信号 · ${primary.title}${extras} ｜ ${preview}`);
+    dom.dialStatus.dataset.state = "locked";
+  } else {
+    setDialStatusText(`正在搜寻频道 ${freqString} MHz`);
+    dom.dialStatus.dataset.state = "scanning";
+  }
+}
+
+function setDialStatusText(text) {
+  if (!dom.dialStatus) return;
+  dom.dialStatus.classList.add("is-dimmed");
+  dom.dialStatus.textContent = text;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      dom.dialStatus.classList.remove("is-dimmed");
+    });
+  });
+}
+
 async function loadPosts() {
   try {
     const response = await fetch(`${POSTS_ENDPOINT}?v=${Date.now()}`);
@@ -160,6 +276,13 @@ async function loadPosts() {
     state.posts = posts;
     updateHeroCounter(posts.length);
     renderPosts();
+    buildFrequencyMap(posts);
+    if (!dialState.hasSnapped) {
+      snapDialToClosestStation();
+      dialState.hasSnapped = true;
+    } else {
+      updateDialUI();
+    }
   } catch (error) {
     console.error(error);
     dom.postGrid.innerHTML = renderErrorCard("内容数据暂时不可用");
@@ -195,6 +318,36 @@ function renderPosts() {
   dom.postGrid.innerHTML = filtered
     .map((post) => createCard(post))
     .join("");
+}
+
+function buildFrequencyMap(posts) {
+  dialState.postsByFrequency = posts.reduce((map, post) => {
+    const freqValue = parseFrequency(post.frequency);
+    if (!Number.isFinite(freqValue)) return map;
+    const key = freqValue.toFixed(1);
+    const stack = map.get(key) || [];
+    stack.push(post);
+    map.set(key, stack);
+    return map;
+  }, new Map());
+
+  dialState.availableFrequencies = Array.from(dialState.postsByFrequency.keys())
+    .map(Number)
+    .sort((a, b) => a - b);
+}
+
+function snapDialToClosestStation() {
+  if (!dialState.availableFrequencies.length) {
+    updateDialUI();
+    return;
+  }
+  const current = dialState.frequency;
+  const closest = dialState.availableFrequencies.reduce((prev, freq) => {
+    const prevDiff = Math.abs(prev - current);
+    const nextDiff = Math.abs(freq - current);
+    return nextDiff < prevDiff ? freq : prev;
+  }, dialState.availableFrequencies[0]);
+  setDialFrequency(closest, { force: true });
 }
 
 function createCard(post) {
@@ -241,6 +394,21 @@ function formatDate(value) {
   return new Date(value).toLocaleDateString("zh-CN", { year: "numeric", month: "short", day: "numeric" });
 }
 
+function parseFrequency(value) {
+  if (!value) return NaN;
+  const numeric = Number(String(value).replace(/[^0-9.]/g, ""));
+  return Number.isFinite(numeric) ? numeric : NaN;
+}
+
+function truncateText(text, limit) {
+  if (!text) return "";
+  return text.length > limit ? `${text.slice(0, limit - 1)}…` : text;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 async function loadPlaylist() {
   if (!audioElements.audio) return;
   try {
@@ -264,11 +432,16 @@ function setTrack(index) {
   if (!audioState.playlist.length) return;
   audioState.currentIndex = (index + audioState.playlist.length) % audioState.playlist.length;
   const track = audioState.playlist[audioState.currentIndex];
-  audioElements.audio.src = track.url;
+  const source = resolveTrackSource(track);
+  if (!source) {
+    console.warn("Track is missing a playable source", track);
+    return;
+  }
+  audioElements.audio.src = source;
   audioElements.title.textContent = track.title;
-  audioElements.subtitle.textContent = track.subtitle || track.artist || "Sunset Radio";
-  audioElements.mood.textContent = track.mood || "Lo-Fi";
-  audioElements.cover.style.backgroundImage = track.cover ? `url(${track.cover})` : "";
+  audioElements.mood.textContent = track.mood || track.segment || "On Air";
+  announceTrack(track);
+  updateCoverArtwork(track);
   audioElements.progress.value = "0";
   if (audioState.isPlaying) {
     playAudio();
@@ -311,4 +484,78 @@ function playNextTrack() {
   if (audioState.isPlaying) {
     playAudio();
   }
+}
+
+function resolveTrackSource(track) {
+  if (track?.url) return track.url;
+  if (track?.file) {
+    return `${LOCAL_AUDIO_BASE}${encodeFilePath(track.file)}`;
+  }
+  return "";
+}
+
+function encodeFilePath(path) {
+  return path
+    .split("/")
+    .map((segment) => segment.trim())
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+}
+
+function announceTrack(track) {
+  if (!audioElements.subtitle) return;
+  clearIntroTimers();
+  const segment = track.segment || RADIO_DEFAULT_SEGMENT;
+  const frequency = track.frequency || RADIO_DEFAULT_FREQUENCY;
+  const host = track.host || RADIO_DEFAULT_HOST;
+  const introScript = track.intro || `Now cueing ${track.title}`;
+  const sequence = [
+    `${segment} · ${frequency}`,
+    `${host}: ${introScript}`,
+    formatNowPlaying(track)
+  ];
+  audioElements.subtitle.textContent = sequence[0];
+  audioState.introTimers = sequence.slice(1).map((line, index) => {
+    return setTimeout(() => {
+      audioElements.subtitle.textContent = line;
+    }, 3200 * (index + 1));
+  });
+}
+
+function formatNowPlaying(track) {
+  const artist = track.artist ? ` — ${track.artist}` : "";
+  return `Now Playing · ${track.title}${artist}`;
+}
+
+function clearIntroTimers() {
+  if (!audioState.introTimers?.length) return;
+  audioState.introTimers.forEach((timerId) => clearTimeout(timerId));
+  audioState.introTimers = [];
+}
+
+function updateCoverArtwork(track) {
+  if (!audioElements.cover) return;
+  if (track.cover) {
+    audioElements.cover.style.backgroundImage = `url(${track.cover})`;
+    audioElements.cover.removeAttribute("data-placeholder");
+    return;
+  }
+  const [start, end] = getMoodGradient(track.mood || track.segment || "");
+  audioElements.cover.style.backgroundImage = `linear-gradient(135deg, ${start}, ${end})`;
+  audioElements.cover.setAttribute("data-placeholder", "true");
+}
+
+function getMoodGradient(label) {
+  const mood = (label || "").toLowerCase();
+  if (mood.includes("classical") || mood.includes("gramophone")) {
+    return ["#1f1c2c", "#928dab"];
+  }
+  if (mood.includes("neon") || mood.includes("night") || mood.includes("city")) {
+    return ["#1a2a6c", "#b21f1f"];
+  }
+  if (mood.includes("raw") || mood.includes("cassette")) {
+    return ["#3c1053", "#ad5389"];
+  }
+  return ["#141e30", "#243b55"];
 }

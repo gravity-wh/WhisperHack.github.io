@@ -232,6 +232,8 @@ main {
 }
 
 .sr-dial__track {
+  --dial-shift: 0%;
+  --needle-position: 50%;
   height: 60px;
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.35);
@@ -239,6 +241,13 @@ main {
   overflow: hidden;
   display: flex;
   align-items: center;
+  cursor: ew-resize;
+  transition: box-shadow 0.2s ease;
+}
+
+.sr-dial__track:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
 }
 
 .sr-dial__track::before {
@@ -247,25 +256,36 @@ main {
   inset: 0;
   background-image: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.1) 0,
-    rgba(255, 255, 255, 0.1) 2px,
+    rgba(255, 255, 255, 0.12) 0,
+    rgba(255, 255, 255, 0.12) 2px,
     transparent 2px,
     transparent 12px
   );
+  transform: translateX(var(--dial-shift));
+  transition: transform 0.25s ease-out;
 }
 
 .sr-dial__needle {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
   width: 2px;
-  margin: auto;
+  left: var(--needle-position);
+  transform: translateX(-50%);
   background: var(--accent);
   box-shadow: 0 0 12px rgba(249, 115, 22, 0.8);
+  transition: left 0.25s ease-out, box-shadow 0.25s ease-out;
 }
 
 .sr-dial__status {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
+  min-height: 1.6em;
+  transition: opacity 0.3s ease;
+}
+
+.sr-dial__status.is-dimmed {
+  opacity: 0.35;
 }
 
 .sr-categories {

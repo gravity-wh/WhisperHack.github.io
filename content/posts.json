@@ -76,5 +76,18 @@
     "status": "shipped",
     "phase": "note",
     "featured": false
+  },
+  {
+    "slug": "Gemini-changed-my-world",
+    "title": "一些关于AI的思考与预测",
+    "date": "2025-11-23",
+    "summary": "新的生产生活范式即将到来，未来会是什么样？",
+    "tags": ["AI"],
+    "readingTime": "6 min",
+    "category": "ai",
+    "frequency": "96.3 FM",
+    "status": "shipped",
+    "phase": "note",
+    "featured": false
   }
 ]
