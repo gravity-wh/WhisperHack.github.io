@@ -1,56 +1,80 @@
 [
   {
-    "slug": "synthetic-signal-stack",
-    "title": "Synthetic Signal Stack：在人机共感里的多模态底座",
-    "date": "2025-10-26",
-    "summary": "记录一个旨在统一语义、触觉与环境感知信号的实验堆栈，并验证其在 AI 原生接口中的响应延迟与能耗表现。",
-    "tags": ["AI", "Infra"],
-    "readingTime": "8 min",
-    "featured": true,
+    "slug": "cmos-bandgap-design",
+    "title": "CMOS 带隙基准电压源的设计思考",
+    "date": "2023-10-12",
+    "summary": "在深亚微米工艺下，如何降低温度系数并提高 PSRR 的工程实践笔记。",
+    "tags": ["IC", "Analog"],
+    "readingTime": "15 min",
+    "category": "ic-design",
+    "frequency": "98.5 FM",
     "status": "shipped",
-    "phase": "ship",
-    "roadmap": {
-      "phase": "Deploy",
-      "eta": "2025 Q4",
-      "focus": "Open-sourcing sensing bridge",
-      "note": "将多模态信号桥接协议与 UI 套件整合，提供云端 + 边缘双模式对接。",
-      "order": 2
-    }
+    "phase": "broadcast",
+    "featured": true
   },
   {
-    "slug": "designing-synthetic-senses",
-    "title": "Designing Synthetic Senses · 接往未来界面",
-    "date": "2025-11-08",
-    "summary": "以“感官合成器”为原型，追踪如何在纯软件环境里模拟真实触觉/温度反馈，并通过 LLM 生成的接口指令控制硬件中枢。",
-    "tags": ["Design", "AI"],
-    "readingTime": "6 min",
-    "featured": true,
+    "slug": "uvm-testbench-guide",
+    "title": "UVM 环境搭建：从 Hello World 到 完整 Testbench",
+    "date": "2023-10-20",
+    "summary": "针对初学者的数字验证入门指南，拆解 Agent、Driver、Monitor 与 Scoreboard 的连接逻辑。",
+    "tags": ["Verification", "UVM"],
+    "readingTime": "20 min",
+    "category": "dig-verification",
+    "frequency": "102.4 FM",
     "status": "building",
     "phase": "build",
-    "roadmap": {
-      "phase": "Build",
-      "eta": "2026 Q1",
-      "focus": "LLM-native interface kit",
-      "note": "完成虚拟原型 + Figma 插件，并开放 API 供第三方指令集接入。",
-      "order": 1
-    }
+    "featured": true
   },
   {
-    "slug": "infra-garden-log",
-    "title": "Infra Garden Log · 低功耗自治节点",
-    "date": "2025-09-18",
-    "summary": "一份以园艺比喻解释分布式推理集群调度策略的日志，涵盖边缘节点健康监控以及 WhisperHack 实验云的布署方式。",
-    "tags": ["Infra"],
-    "readingTime": "5 min",
-    "featured": false,
+    "slug": "dali-sunset-notes",
+    "title": "大理的黄昏：去有风的地方",
+    "date": "2023-11-05",
+    "summary": "背着吉他走过洱海边，看着苍山雪。旅行不是为了逃避，而是为了更好地回归。",
+    "tags": ["旅途", "随笔"],
+    "readingTime": "8 min",
+    "category": "travel",
+    "frequency": "88.0 FM",
     "status": "shipped",
-    "phase": "ship",
-    "roadmap": {
-      "phase": "Observe",
-      "eta": "2025 Q3",
-      "focus": "Thermal aware autoscaling",
-      "note": "将温控策略抽象为策略引擎，供本地集群复用。",
-      "order": 3
-    }
+    "phase": "notes",
+    "featured": false
+  },
+  {
+    "slug": "rag-langchain-lab",
+    "title": "LLM 在垂直领域的落地：RAG 架构实战",
+    "date": "2023-11-15",
+    "summary": "借助 LangChain 与向量数据库构建私有知识库问答系统，抑制幻觉并监控检索质量。",
+    "tags": ["AI", "RAG"],
+    "readingTime": "12 min",
+    "category": "ai",
+    "frequency": "108.0 FM",
+    "status": "building",
+    "phase": "experiment",
+    "featured": true
+  },
+  {
+    "slug": "guitar-caged-system",
+    "title": "吉他乐理：CAGED 系统与指板记忆",
+    "date": "2023-11-28",
+    "summary": "不要死记硬背音阶。理解 CAGED 系统，让你在指板上自由游走。",
+    "tags": ["Guitar", "Theory"],
+    "readingTime": "10 min",
+    "category": "guitar",
+    "frequency": "92.7 FM",
+    "status": "shipped",
+    "phase": "study",
+    "featured": false
+  },
+  {
+    "slug": "reading-siddhartha",
+    "title": "读《悉达多》：关于自我与流浪",
+    "date": "2023-12-01",
+    "summary": "黑塞笔下的求道者。知识可以传授，但智慧无法言说。每个人都要走自己的路。",
+    "tags": ["Reading"],
+    "readingTime": "6 min",
+    "category": "reading",
+    "frequency": "96.3 FM",
+    "status": "shipped",
+    "phase": "note",
+    "featured": false
   }
 ]

@@ -2,126 +2,154 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="WhisperHack · 科技观察与构建实验室" />
-  <title>WhisperHack · Tech Field Notes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Sunset Radio · 记录一名工程师的日与夜" />
+  <title>Sunset Radio · 落日电台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body>
-  <div class="background-grid" aria-hidden="true"></div>
-  <header class="site-header">
-    <div class="logo">WhisperHack</div>
-    <nav class="nav">
-      <a href="#focus">焦点</a>
-      <a href="#signals">最新信号</a>
-      <a href="#roadmap">路线图</a>
-      <a href="#about">关于</a>
-    </nav>
-    <button class="cta ghost">订阅更新</button>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div>
-        <p class="eyebrow">Tech Journal · 2025</p>
-        <h1>记录一切关于 AI × Infra × Future Interfaces 的实验与洞察。</h1>
-        <p class="lede">
-          这是一个可持续迭代的数字实验室：一部分是公开的研究手记，一部分是长期构建项目，
-          通过结构化的内容卡和路线图，让每次更新都可追踪、可验证、可复制。
-        </p>
-        <div class="hero-actions">
-          <a class="cta" href="#signals">浏览最新</a>
-          <a class="cta secondary" href="posts/post.html?slug=designing-synthetic-senses">随机阅读</a>
+  <div class="sr-page">
+    <header class="sr-nav" id="site-nav">
+      <div class="sr-nav__inner">
+        <button class="sr-logo" data-logo type="button">
+          <span class="sr-logo__icon" aria-hidden="true">📻</span>
+          <span class="sr-logo__text">落日电台</span>
+        </button>
+        <nav class="sr-nav__links" aria-label="主导航">
+          <a href="#posts" data-nav-link>关于主播</a>
+          <a href="#posts" data-nav-link>订阅 RSS</a>
+          <div class="sr-search">
+            <input id="search-input" type="search" placeholder="搜索频道..." aria-label="搜索信号" />
+          </div>
+        </nav>
+        <button class="sr-nav__toggle" data-mobile-toggle aria-label="切换导航" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+      <div class="sr-nav__mobile" data-mobile-menu aria-expanded="false">
+        <input id="mobile-search-input" type="search" placeholder="搜索频道..." aria-label="搜索信号（移动端）" />
+        <div class="sr-nav__mobile-links">
+          <a href="#posts" data-nav-link>关于主播</a>
+          <a href="#posts" data-nav-link>订阅 RSS</a>
         </div>
       </div>
-      <article class="hero-card">
-        <header>
-          <p class="card-label">Live Metrics</p>
-          <span class="badge">alpha stream</span>
-        </header>
-        <ul>
-          <li>
-            <p class="metric" id="metric-published">0</p>
-            <p class="caption">已发布研究</p>
-          </li>
-          <li>
-            <p class="metric" id="metric-building">0</p>
-            <p class="caption">在建项目</p>
-          </li>
-          <li>
-            <p class="metric" id="metric-monthly">+0</p>
-            <p class="caption">本月增量</p>
-          </li>
-        </ul>
-        <footer>
-          <p>数据实时映射 content/posts.json，更新内容即可自动同步。</p>
-        </footer>
-      </article>
-    </section>
+    </header>
 
-    <section id="focus" class="section">
-      <header class="section-header">
-        <h2>焦点实验</h2>
-        <p>精选长篇或构建日志，映射当前最投入的方向。</p>
-      </header>
-      <div id="featured-grid" class="card-grid"></div>
-    </section>
-
-    <section id="signals" class="section">
-      <header class="section-header">
-        <div>
-          <h2>最新信号</h2>
-          <p>以时间顺序呈现最近的想法、研究与工程更新。</p>
+    <main>
+      <section class="sr-hero">
+        <div class="sr-hero__inner">
+          <div class="sr-hero__copy">
+            <div class="sr-hero__badge">
+              <span class="sr-dot" aria-hidden="true"></span>
+              Live On Air
+            </div>
+            <h1>
+              在数字荒原里<br />
+              <span>捕捉模拟信号的余温</span>
+            </h1>
+            <p>
+              这里是 Sunset Radio。记录一名工程师的日与夜。聊聊芯片与 AI 的理性逻辑，也谈谈吉他与远方的感性瞬间。
+            </p>
+            <div class="sr-hero__meta">
+              <div>
+                <p>信号索引</p>
+                <strong id="signal-counter">00</strong>
+              </div>
+              <div>
+                <p>当前频段</p>
+                <strong>98.7 MHz</strong>
+              </div>
+              <div>
+                <p>编号</p>
+                <strong>#SR-2025</strong>
+              </div>
+            </div>
+          </div>
+          <div class="sr-hero__dial" aria-hidden="true">
+            <div class="sr-dial__scale">
+              <span>88.0</span>
+              <span>108.0</span>
+            </div>
+            <div class="sr-dial__track">
+              <div class="sr-dial__ticks"></div>
+              <span class="sr-dial__needle"></span>
+            </div>
+            <p class="sr-dial__status">正在接收信号...</p>
+          </div>
         </div>
-        <div class="pills" role="tablist">
-          <button class="pill active" data-filter="all">全部</button>
-          <button class="pill" data-filter="ai">AI</button>
-          <button class="pill" data-filter="infra">Infra</button>
-          <button class="pill" data-filter="design">Design</button>
+      </section>
+
+      <section class="sr-categories" aria-label="信号分类">
+        <div class="sr-categories__scroll hide-scrollbar" id="category-bar"></div>
+      </section>
+
+      <section class="sr-posts" id="posts">
+        <div class="sr-posts__header">
+          <div class="sr-posts__title">
+            <span class="sr-pill"></span>
+            <h2 id="posts-heading">最新广播</h2>
+          </div>
+          <span id="posts-count">0 条信号记录</span>
         </div>
-      </header>
-      <div id="latest-list" class="latest-list"></div>
-    </section>
+        <div class="sr-post-grid" id="post-grid"></div>
+        <div class="sr-empty" id="empty-state" hidden>
+          <div class="sr-empty__icon">📡</div>
+          <p>该频段暂无信号。</p>
+          <button type="button" id="reset-filters">重置接收器</button>
+        </div>
+      </section>
+    </main>
 
-    <section id="roadmap" class="section">
-      <header class="section-header">
-        <h2>路线图</h2>
-        <p>公开性的构建进度表，方便追踪下一步迭代。</p>
-      </header>
-      <div id="timeline" class="timeline"></div>
-    </section>
-
-    <section id="about" class="section two-column">
-      <article>
-        <h3>关于我</h3>
+    <footer class="sr-footer">
+      <div>
+        <div class="sr-footer__logo">
+          <span>📻</span>
+          <strong>落日电台</strong>
+        </div>
         <p>
-          WhisperHack 是一个在边界条件下摸索未来人机协作模式的长期项目。我关注
-          AI 原生接口、感知基础设施和自治工具链，习惯以可复现的实验方式验证假设。
+          构建于硅基芯片之上，游走于 0 和 1 的间隙，用文字记录模拟世界的浪漫。
         </p>
-        <p>
-          这个站点采用数据驱动的内容层：Markdown × JSON。写作与维护被拆分为
-          “只写内容” 与 “自动排版” 两部分，避免因为美术或组件调整而阻塞发布节奏。
-        </p>
-      </article>
-      <article class="panel">
-        <h3>订阅路径</h3>
-        <p>最新内容会同步到 GitHub Pages。也可以通过以下方式获取增量：</p>
+      </div>
+      <div>
+        <h3>栏目索引</h3>
         <ul>
-          <li>RSS: <code>/feed.xml</code>（可拓展）</li>
-          <li>GitHub Discussions · <a href="https://github.com/WhisperHack" target="_blank" rel="noreferrer">@WhisperHack</a></li>
-          <li>Newsletter（占位）：可对接 Buttondown / Substack</li>
+          <li><a href="#posts">模拟电路</a></li>
+          <li><a href="#posts">AI 实验室</a></li>
+          <li><a href="#posts">验证方法学</a></li>
+          <li><a href="#posts">吉他指弹</a></li>
+          <li><a href="#posts">旅行游记</a></li>
+          <li><a href="#posts">读书笔记</a></li>
         </ul>
-      </article>
-    </section>
-  </main>
+      </div>
+      <div>
+        <h3>联系方式</h3>
+        <p>Email: hello@sunset-radio.com</p>
+        <p>GitHub: @gravity-wh</p>
+      </div>
+    </footer>
 
-  <footer class="site-footer">
-    <p>© <span id="year"></span> WhisperHack · Built for GitHub Pages.</p>
-    <p class="footnote">Design system: glass morphism + neon grid · 数据驱动内容。</p>
-  </footer>
+    <div class="sr-player" id="player" aria-live="polite">
+      <div class="sr-player__cover" id="player-cover" aria-hidden="true"></div>
+      <div class="sr-player__info">
+        <p id="player-title">Sunset Lo-Fi Beats</p>
+        <small id="player-subtitle">加载播放列表...</small>
+        <div class="sr-player__progress">
+          <input type="range" min="0" max="100" value="0" step="1" id="player-progress" aria-label="播放进度" />
+        </div>
+      </div>
+      <div class="sr-player__controls">
+        <button type="button" id="player-toggle" aria-label="播放或暂停">▶</button>
+        <button type="button" id="player-next" aria-label="下一首">⏭</button>
+      </div>
+      <div class="sr-player__mood" id="player-mood">Lo-Fi</div>
+    </div>
+    <audio id="bg-audio" preload="metadata"></audio>
+  </div>
 
   <script src="assets/js/main.js" type="module"></script>
 </body>

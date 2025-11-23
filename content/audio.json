@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Sunset Lo-Fi Beats",
+    "artist": "Wave Atelier",
+    "subtitle": "Coding & Designing Mode",
+    "url": "https://cdn.pixabay.com/download/audio/2023/05/30/audio_4c0c522d7a.mp3?filename=lofi-study-112191.mp3",
+    "cover": "https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=300&q=80",
+    "mood": "Lo-Fi"
+  },
+  {
+    "title": "Signal Drift",
+    "artist": "North Circuit",
+    "subtitle": "Night Coding Session",
+    "url": "https://cdn.pixabay.com/download/audio/2022/12/04/audio_9649a0ffc3.mp3?filename=night-stories-128146.mp3",
+    "cover": "https://images.unsplash.com/photo-1470229538611-16ba8c7ffbd7?auto=format&fit=crop&w=300&q=80",
+    "mood": "Ambient"
+  },
+  {
+    "title": "Analog Romance",
+    "artist": "FM-87",
+    "subtitle": "Tape Loop",
+    "url": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_53073c0877.mp3?filename=chill-ambient-110062.mp3",
+    "cover": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=300&q=80",
+    "mood": "Calm"
+  }
+]
