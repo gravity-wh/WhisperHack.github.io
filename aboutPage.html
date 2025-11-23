@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Sunset Radio · 关于主播" />
+  <title>落日电台 · 关于主播</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <div class="sr-page">
+    <header class="sr-nav" id="site-nav">
+      <div class="sr-nav__inner">
+        <button class="sr-logo" data-logo type="button">
+          <span class="sr-logo__icon" aria-hidden="true">📻</span>
+          <span class="sr-logo__text">落日电台</span>
+        </button>
+        <nav class="sr-nav__links" aria-label="主导航">
+          <a href="index.html#posts" data-nav-link>返回首页</a>
+          <a href="aboutPage.html" data-nav-link aria-current="page">关于主播</a>
+          <div class="sr-search">
+            <input id="search-input" type="search" placeholder="搜索频道..." aria-label="搜索信号" />
+          </div>
+        </nav>
+        <button class="sr-nav__toggle" data-mobile-toggle aria-label="切换导航" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+      <div class="sr-nav__mobile" data-mobile-menu aria-expanded="false">
+        <input id="mobile-search-input" type="search" placeholder="搜索频道..." aria-label="搜索信号（移动端）" />
+        <div class="sr-nav__mobile-links">
+          <a href="index.html#posts" data-nav-link>返回首页</a>
+          <a href="aboutPage.html" data-nav-link aria-current="page">关于主播</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="sr-about">
+      <section class="sr-about__hero">
+        <div class="sr-about__hero-icon" aria-hidden="true">📡</div>
+        <div>
+          <div class="sr-about__badge">Live Source · Sunset Engineer</div>
+          <h1>演播室详情</h1>
+          <p>这里是 Sunset Radio 。关于主播、技术栈，以及那些不务正业的浪漫瞬间。</p>
+        </div>
+      </section>
+
+      <section class="sr-about__grid">
+        <aside class="sr-id-card">
+          <div class="sr-id-card__banner"></div>
+          <div class="sr-id-card__avatar" aria-hidden="true">👨🏻‍💻</div>
+          <div class="sr-id-card__body">
+            <p class="sr-id-card__role">主播 / IC设计</p>
+            <h2>@SunsetEngineer</h2>
+            <p class="sr-id-card__meta">📍 Nanjing · China</p>
+          </div>
+          <div class="sr-id-card__actions">
+            <a class="sr-about__btn sr-about__btn--primary" href="mailto:hello@sunset-radio.com">发送邮件</a>
+            <div class="sr-about__socials">
+              <a class="sr-about__btn" href="https://github.com/gravity-wh" target="_blank" rel="noreferrer">GitHub</a>
+              <a class="sr-about__btn" href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+            </div>
+          </div>
+          <div class="sr-about__panel">
+            <div class="sr-about__metrics">
+              <div>
+                <span>COFFEE</span>
+                <strong>8,204</strong>
+                <small>CUPS</small>
+              </div>
+              <div>
+                <span>FLIGHTS</span>
+                <strong>128</strong>
+                <small>HOURS</small>
+              </div>
+            </div>
+            <div class="sr-about__status">
+              <span class="sr-dot" aria-hidden="true"></span>
+              Debugging Life...
+            </div>
+          </div>
+        </aside>
+
+        <div class="sr-about__body">
+          <article class="sr-about__section">
+            <header>
+              <span>关于我</span>
+              <h3>理性与感性的双频生活</h3>
+            </header>
+            <p>👋 嗨，我是落日电台的主理人。这不仅仅是一个博客，更是一个游走于 <strong>理性与感性</strong> 边界的实验场。</p>
+            <p>白天，我在 Cadence 的波形里寻找逻辑真理，和微米级晶体管搏斗；也会在生成式 AI 的浪潮里冲浪，探索 LLM 在垂直行业的落地可能性。</p>
+            <p>夜晚或周末，我放下键盘拿起 Fender 吉他，或者买一张随机的机票。我相信模拟电路的噪声和吉他的失真有着共通的哲学——它们都是不完美的，而不完美构成真实。</p>
+          </article>
+
+          <article class="sr-about__section">
+            <header>
+              <span>技能调音台</span>
+              <h3>EQ Settings</h3>
+            </header>
+            <div class="sr-about__skills">
+              <div class="sr-about__skill" style="--skill-level: 90%">
+                <div>
+                  <p>Analog IC Design (Virtuoso / Spectre)</p>
+                  <span>90%</span>
+                </div>
+                <div class="sr-about__skill-bar">
+                  <span class="sr-about__skill-fill"></span>
+                </div>
+              </div>
+              <div class="sr-about__skill" style="--skill-level: 85%">
+                <div>
+                  <p>Digital Verification (UVM / SystemVerilog)</p>
+                  <span>85%</span>
+                </div>
+                <div class="sr-about__skill-bar">
+                  <span class="sr-about__skill-fill"></span>
+                </div>
+              </div>
+              <div class="sr-about__skill" style="--skill-level: 75%">
+                <div>
+                  <p>Generative AI (PyTorch / LangChain)</p>
+                  <span>75%</span>
+                </div>
+                <div class="sr-about__skill-bar">
+                  <span class="sr-about__skill-fill"></span>
+                </div>
+              </div>
+              <div class="sr-about__skill" style="--skill-level: 60%">
+                <div>
+                  <p>Frontend Dev (React / Vite)</p>
+                  <span>60%</span>
+                </div>
+                <div class="sr-about__skill-bar">
+                  <span class="sr-about__skill-fill"></span>
+                </div>
+              </div>
+              <div class="sr-about__skill" style="--skill-level: 80%">
+                <div>
+                  <p>Music Theory &amp; Guitar</p>
+                  <span>80%</span>
+                </div>
+                <div class="sr-about__skill-bar">
+                  <span class="sr-about__skill-fill"></span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="sr-about__section">
+            <header>
+              <span>常用装备</span>
+              <h3>Signal Chain</h3>
+            </header>
+            <div class="sr-about__equipment">
+              <div>
+                <h4>Workstation</h4>
+                <p>Linux Server · Cadence EDA · VS Code · Vim</p>
+              </div>
+              <div>
+                <h4>Instruments</h4>
+                <p>Fender Stratocaster · Martin D-28 · Logic Pro X</p>
+              </div>
+              <div>
+                <h4>Stacks</h4>
+                <p>LangChain · OpenAI · Supabase · Next.js</p>
+              </div>
+              <div>
+                <h4>Daily Carry</h4>
+                <p>Paper Notebook · Leica Q · Random Boarding Pass</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="sr-footer">
+      <div>
+        <div class="sr-footer__logo">
+          <span>📻</span>
+          <strong>落日电台</strong>
+        </div>
+        <p>构建于硅基芯片之上，游走于 0 和 1 的间隙，用文字记录模拟世界的浪漫。</p>
+      </div>
+      <div>
+        <h3>栏目索引</h3>
+        <ul>
+          <li><a href="index.html#posts" data-program-trigger="chronos-heart">时序之心 · FM102.4</a></li>
+          <li><a href="index.html#posts" data-program-trigger="beyond-sapien">智人之上 · FM108.0</a></li>
+          <li><a href="index.html#posts" data-program-trigger="endless-steps">步履不停 · FM88.0</a></li>
+          <li><a href="index.html#posts" data-program-trigger="sonic-fragments">声音碎片 · FM92.7</a></li>
+          <li><a href="index.html#posts" data-program-trigger="between-lines">字里行间 · FM96.3</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>联系方式</h3>
+        <p>Email: hello@sunset-radio.com</p>
+        <p>GitHub: @gravity-wh</p>
+      </div>
+    </footer>
+
+    <div class="sr-player" id="player" aria-live="polite">
+      <div class="sr-player__cover" id="player-cover" aria-hidden="true"></div>
+      <div class="sr-player__info">
+        <p id="player-title">Sunset Lo-Fi Beats</p>
+        <small id="player-subtitle">加载播放列表...</small>
+        <div class="sr-player__progress">
+          <input type="range" min="0" max="100" value="0" step="1" id="player-progress" aria-label="播放进度" />
+        </div>
+      </div>
+      <div class="sr-player__controls">
+        <button type="button" id="player-toggle" aria-label="播放或暂停">▶</button>
+        <button type="button" id="player-next" aria-label="下一首">⏭</button>
+      </div>
+      <div class="sr-player__mood" id="player-mood">Lo-Fi</div>
+    </div>
+    <audio id="bg-audio" preload="metadata"></audio>
+  </div>
+
+  <script src="assets/js/main.js" type="module"></script>
+</body>
+</html>

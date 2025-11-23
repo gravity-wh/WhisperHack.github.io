@@ -19,7 +19,7 @@
           <span class="sr-logo__text">落日电台</span>
         </button>
         <nav class="sr-nav__links" aria-label="主导航">
-          <a href="#posts" data-nav-link>关于主播</a>
+          <a href="aboutPage.html" data-nav-link>关于主播</a>
           <a href="#posts" data-nav-link>订阅 RSS</a>
           <div class="sr-search">
             <input id="search-input" type="search" placeholder="搜索频道..." aria-label="搜索信号" />
@@ -34,7 +34,7 @@
       <div class="sr-nav__mobile" data-mobile-menu aria-expanded="false">
         <input id="mobile-search-input" type="search" placeholder="搜索频道..." aria-label="搜索信号（移动端）" />
         <div class="sr-nav__mobile-links">
-          <a href="#posts" data-nav-link>关于主播</a>
+          <a href="aboutPage.html" data-nav-link>关于主播</a>
           <a href="#posts" data-nav-link>订阅 RSS</a>
         </div>
       </div>
@@ -50,36 +50,41 @@
             </div>
             <h1>
               在数字荒原里<br />
-              <span>捕捉模拟信号的余温</span>
+              <span>捕捉宇宙诞生时的余晖</span>
             </h1>
             <p>
-              这里是 Sunset Radio。记录一名工程师的日与夜。聊聊芯片与 AI 的理性逻辑，也谈谈吉他与远方的感性瞬间。
+              这里是 Sunset Radio，记录一名工程师的日与夜。<br />
+              感谢你从我的全世界路过。
             </p>
             <div class="sr-hero__meta">
               <div>
-                <p>信号索引</p>
-                <strong id="signal-counter">00</strong>
+                <p>电台索引</p>
+                <strong id="signal-counter">TIMING-CORE</strong>
               </div>
               <div>
                 <p>当前频段</p>
-                <strong>98.7 MHz</strong>
+                <strong id="current-frequency">102.4 MHz</strong>
               </div>
               <div>
-                <p>编号</p>
-                <strong>#SR-2025</strong>
+                <p>节目</p>
+                <strong id="station-tag">时序之心</strong>
               </div>
             </div>
           </div>
-          <div class="sr-hero__dial" aria-hidden="true">
+          <div class="sr-hero__dial" role="region" aria-label="虚拟调频波轮">
             <div class="sr-dial__scale">
               <span>88.0</span>
               <span>108.0</span>
             </div>
-            <div class="sr-dial__track">
-              <div class="sr-dial__ticks"></div>
-              <span class="sr-dial__needle"></span>
+            <div class="sr-dial__track" id="dial-track" tabindex="0" aria-label="滚动调节频率">
+              <div class="sr-dial__ticks" aria-hidden="true"></div>
+              <span class="sr-dial__needle" aria-hidden="true"></span>
             </div>
-            <p class="sr-dial__status">正在接收信号...</p>
+            <p class="sr-dial__status" id="dial-status">
+              <span class="sr-dial__status-lead" id="dial-status-lead">FM 102.4 · 时序之心</span>
+              <span class="sr-dial__status-highlight" id="dial-status-highlight">最新节目载入中</span>
+              <span class="sr-dial__status-detail" id="dial-status-detail">正在接收信号...</span>
+            </p>
           </div>
         </div>
       </section>
@@ -92,9 +97,9 @@
         <div class="sr-posts__header">
           <div class="sr-posts__title">
             <span class="sr-pill"></span>
-            <h2 id="posts-heading">最新广播</h2>
+            <h2 id="posts-heading">最新节目</h2>
           </div>
-          <span id="posts-count">0 条信号记录</span>
+          <span id="posts-count">0 条节目记录</span>
         </div>
         <div class="sr-post-grid" id="post-grid"></div>
         <div class="sr-empty" id="empty-state" hidden>
@@ -118,12 +123,11 @@
       <div>
         <h3>栏目索引</h3>
         <ul>
-          <li><a href="#posts">模拟电路</a></li>
-          <li><a href="#posts">AI 实验室</a></li>
-          <li><a href="#posts">验证方法学</a></li>
-          <li><a href="#posts">吉他指弹</a></li>
-          <li><a href="#posts">旅行游记</a></li>
-          <li><a href="#posts">读书笔记</a></li>
+          <li><a href="#posts" data-program-trigger="chronos-heart">时序之心</a></li>
+          <li><a href="#posts" data-program-trigger="endless-steps">步履不停</a></li>
+          <li><a href="#posts" data-program-trigger="beyond-sapien">智人之上</a></li>
+          <li><a href="#posts" data-program-trigger="sonic-fragments">声音碎片</a></li>
+          <li><a href="#posts" data-program-trigger="between-lines">字里行间</a></li>
         </ul>
       </div>
       <div>

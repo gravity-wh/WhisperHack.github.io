@@ -7,7 +7,8 @@
     "tags": ["IC", "Analog"],
     "readingTime": "15 min",
     "category": "ic-design",
-    "frequency": "98.5 FM",
+    "frequency": "102.4 FM",
+    "programId": "chronos-heart",
     "status": "shipped",
     "phase": "broadcast",
     "featured": true
@@ -21,19 +22,21 @@
     "readingTime": "20 min",
     "category": "dig-verification",
     "frequency": "102.4 FM",
+    "programId": "chronos-heart",
     "status": "building",
     "phase": "build",
     "featured": true
   },
   {
     "slug": "dali-sunset-notes",
-    "title": "大理的黄昏：去有风的地方",
-    "date": "2023-11-05",
-    "summary": "背着吉他走过洱海边，看着苍山雪。旅行不是为了逃避，而是为了更好地回归。",
+    "title": "江边的黄昏：去有风的地方",
+    "date": "2025-07-05",
+    "summary": "在南京生活了三年，终于摸索出了最适合探索这座城市的方式。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
     "category": "travel",
     "frequency": "88.0 FM",
+    "programId": "endless-steps",
     "status": "shipped",
     "phase": "notes",
     "featured": false
@@ -47,6 +50,7 @@
     "readingTime": "12 min",
     "category": "ai",
     "frequency": "108.0 FM",
+    "programId": "beyond-sapien",
     "status": "building",
     "phase": "experiment",
     "featured": true
@@ -60,6 +64,7 @@
     "readingTime": "10 min",
     "category": "guitar",
     "frequency": "92.7 FM",
+    "programId": "sonic-fragments",
     "status": "shipped",
     "phase": "study",
     "featured": false
@@ -73,8 +78,24 @@
     "readingTime": "6 min",
     "category": "reading",
     "frequency": "96.3 FM",
+    "programId": "between-lines",
+    "status": "shipped",
+    "phase": "note",
+    "featured": false
+  },
+    {
+    "slug": "PLL-design",
+    "title": "PLL 设计基础与实践",
+    "date": "2025-11-24",
+    "summary": "锁相环（PLL）的基本原理与设计要点，涵盖环路滤波器、鉴相器及频率合成技术。",
+    "tags": ["Reading"],
+    "readingTime": "6 min",
+    "category": "ic-design",
+    "frequency": "102.4 FM",
+    "programId": "chronos-heart",
     "status": "shipped",
     "phase": "note",
     "featured": false
   }
 ]
+
