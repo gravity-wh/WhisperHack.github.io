@@ -7,6 +7,16 @@ const tagsEl = document.getElementById("post-tags");
 const readingEl = document.getElementById("post-reading");
 const phaseEl = document.getElementById("post-phase");
 const contentEl = document.getElementById("post-content");
+const MATH_RENDER_OPTIONS = {
+	delimiters: [
+		{ left: "$$", right: "$$", display: true },
+		{ left: "\\[", right: "\\]", display: true },
+		{ left: "\\(", right: "\\)", display: false },
+		{ left: "$", right: "$", display: false }
+	],
+	throwOnError: false,
+	strict: "ignore"
+};
 
 init();
 
@@ -50,6 +60,9 @@ async function renderMarkdown(slugValue) {
 	const markdown = await response.text();
 	const html = window.marked.parse(markdown);
 	contentEl.innerHTML = html;
+	queueMathRender();
+	// attempt to render ABC notation blocks (abcjs)
+	renderAbcBlocks();
 }
 
 function renderFallback(message) {
@@ -59,4 +72,43 @@ function renderFallback(message) {
 function formatDate(value) {
 	if (!value) return "--";
 	return new Date(value).toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
+}
+
+function queueMathRender(attempt = 0) {
+	if (!contentEl) return;
+	if (typeof window.renderMathInElement === "function") {
+		renderMathInElement(contentEl, MATH_RENDER_OPTIONS);
+		return;
+	}
+	if (attempt > 20) return;
+	setTimeout(() => queueMathRender(attempt + 1), 100);
+}
+
+function renderAbcBlocks(attempt = 0) {
+	if (!contentEl) return;
+	const selector = 'pre code.language-abc, pre code.language-abcjs, code.language-abc, code.language-abcjs';
+	const nodes = Array.from(contentEl.querySelectorAll(selector));
+	if (!nodes.length) return;
+	const ready = typeof window.ABCJS !== "undefined" && typeof window.ABCJS.renderAbc === "function";
+	if (!ready) {
+		if (attempt > 30) return;
+		setTimeout(() => renderAbcBlocks(attempt + 1), 200);
+		return;
+	}
+	nodes.forEach((code) => {
+		const abcText = code.textContent || code.innerText || "";
+		const pre = code.closest("pre");
+		const container = document.createElement("div");
+		container.className = "abcjs-score";
+		if (pre && pre.parentNode) {
+			pre.parentNode.replaceChild(container, pre);
+		} else if (code.parentNode) {
+			code.parentNode.replaceChild(container, code);
+		}
+		try {
+			window.ABCJS.renderAbc(container, abcText, { responsive: "resize" });
+		} catch (err) {
+			container.textContent = abcText;
+		}
+	});
 }

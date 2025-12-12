@@ -56,6 +56,26 @@ const PROGRAM_SCHEDULE = [
     emoji: "📚",
     description: "以阅读拆解世界，在纸页与现实间来回校准。",
     tagline: "在文字旁注记人生"
+  },
+  {
+    id: "all-counterpoise",
+    name: "万象对冲",
+    englishTag: "ALL-COUNTERPOISE",
+    frequency: 97.3,
+    categories: ["fin-tech"],
+    emoji: "💹",
+    description: "记录金融科技、资本市场与加密叙事的波动，推演长期技术周期。",
+    tagline: "在市场噪声里校准信号"
+  },
+  {
+    id: "zero-to-infinity",
+    name: "零到无穷",
+    englishTag: "ZERO-TO-INFINITY",
+    frequency: 95.6,
+    categories: ["science"],
+    emoji: "🪐",
+    description: "聚焦自然科学的灵感瞬间——从数学到天文的思想跃迁。",
+    tagline: "让万物规律跃迁成波"
   }
 ].map((program) => ({
   ...program,
@@ -80,7 +100,9 @@ const LEGACY_CATEGORY_FALLBACK = {
   ai: { label: "生成式 AI", icon: "🧠" },
   reading: { label: "书海拾贝", icon: "📖" },
   travel: { label: "飞行日记", icon: "✈️" },
-  guitar: { label: "吉他与乐理", icon: "🎸" }
+  guitar: { label: "吉他与乐理", icon: "🎸" },
+  "fin-tech": { label: "金融科技", icon: "💹" },
+  science: { label: "零到无穷", icon: "🪐" }
 };
 
 const state = {
