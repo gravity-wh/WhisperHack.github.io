@@ -1,7 +1,7 @@
 const POSTS_ENDPOINT = "content/posts.json";
 const AUDIO_ENDPOINT = "content/audio.json";
 const LOCAL_AUDIO_BASE = "content/audio/";
-const RADIO_DEFAULT_FREQUENCY = "98.7 MHz";
+const RADIO_DEFAULT_FREQUENCY = "102.4 MHz";
 const INITIAL_DIAL_FREQUENCY = 102.4;
 const RADIO_DEFAULT_SEGMENT = "Sunset Radio";
 const RADIO_DEFAULT_HOST = "DJ Whisper";
@@ -623,7 +623,7 @@ function createCard(post) {
         <span class="sr-chip"><span aria-hidden="true">${badgeIcon}</span>${badgeLabel}</span>
         <span class="sr-card__frequency">${frequency}${programSuffix}</span>
       </div>
-      <div>
+      <div class="sr-card__body">
         <h3>${post.title}</h3>
         <p>${post.summary || ""}</p>
       </div>
@@ -637,13 +637,24 @@ function createCard(post) {
 
 function decoratePostsWithPrograms(posts) {
   return posts.map((post) => {
-    const program = resolveProgramForPost(post);
-    return { ...post, program };
+    // If post has a column field, resolve program from column ID
+    const program = post.column
+      ? PROGRAM_LOOKUP.byId.get(post.column) || resolveProgramForPost(post)
+      : resolveProgramForPost(post);
+    // Derive category and frequency from program if not explicitly set
+    const category = post.category || program?.category || program?.categories?.[0] || null;
+    const frequency = post.frequency || (program ? `${program.frequency.toFixed(1)} FM` : null);
+    const programId = post.programId || program?.id || null;
+    return { ...post, program, category, frequency, programId };
   });
 }
 
 function resolveProgramForPost(post) {
   if (!post) return null;
+  // First check column field (new structure)
+  if (post.column && PROGRAM_LOOKUP.byId.has(post.column)) {
+    return PROGRAM_LOOKUP.byId.get(post.column);
+  }
   if (post.programId && PROGRAM_LOOKUP.byId.has(post.programId)) {
     return PROGRAM_LOOKUP.byId.get(post.programId);
   }

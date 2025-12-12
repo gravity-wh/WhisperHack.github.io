@@ -1,0 +1,86 @@
+[
+  {
+    "id": "chronos-heart",
+    "name": "时序之心",
+    "englishTag": "TIMING-CORE",
+    "frequency": 102.4,
+    "category": "ic-design",
+    "categories": ["ic-design", "dig-verification"],
+    "emoji": "⏱️",
+    "description": "聚焦模拟与数字 IC 设计的前沿与落地，让架构与波形保持时序一致。",
+    "tagline": "当电路与代码同频",
+    "folder": "chronos-heart"
+  },
+  {
+    "id": "endless-steps",
+    "name": "步履不停",
+    "englishTag": "WANDERLUST",
+    "frequency": 88.0,
+    "category": "travel",
+    "categories": ["travel"],
+    "emoji": "🌿",
+    "description": "把旅途中的自然与人文温度，变成随风起伏的短波。",
+    "tagline": "携风出走，向山海问路",
+    "folder": "endless-steps"
+  },
+  {
+    "id": "beyond-sapien",
+    "name": "智人之上",
+    "englishTag": "SAPIEN-PLUS",
+    "frequency": 108.0,
+    "category": "ai",
+    "categories": ["ai"],
+    "emoji": "🤖",
+    "description": "记录人类与人工智能共生的每一次范式跃迁。",
+    "tagline": "在更高维度思考智能",
+    "folder": "beyond-sapien"
+  },
+  {
+    "id": "sonic-fragments",
+    "name": "声音碎片",
+    "englishTag": "SONIC-FRAGMENTS",
+    "frequency": 92.7,
+    "category": "guitar",
+    "categories": ["guitar"],
+    "emoji": "🎧",
+    "description": "分享音乐创作与吉他实验，把旋律拆成可重复的模组。",
+    "tagline": "在频谱里拼出情绪",
+    "folder": "sonic-fragments"
+  },
+  {
+    "id": "between-lines",
+    "name": "字里行间",
+    "englishTag": "BETWEEN-LINES",
+    "frequency": 96.3,
+    "category": "reading",
+    "categories": ["reading"],
+    "emoji": "📚",
+    "description": "以阅读拆解世界，在纸页与现实间来回校准。",
+    "tagline": "在文字旁注记人生",
+    "folder": "between-lines"
+  },
+  {
+    "id": "all-counterpoise",
+    "name": "万象对冲",
+    "englishTag": "ALL-COUNTERPOISE",
+    "frequency": 97.3,
+    "category": "fin-tech",
+    "categories": ["fin-tech"],
+    "emoji": "💹",
+    "description": "记录金融科技、资本市场与加密叙事的波动，推演长期技术周期。",
+    "tagline": "在市场噪声里校准信号",
+    "folder": "all-counterpoise"
+  },
+  {
+    "id": "zero-to-infinity",
+    "name": "零到无穷",
+    "englishTag": "ZERO-TO-INFINITY",
+    "frequency": 95.6,
+    "category": "science",
+    "categories": ["science"],
+    "emoji": "🪐",
+    "description": "聚焦自然科学的灵感瞬间——从数学到天文的思想跃迁。",
+    "tagline": "让万物规律跃迁成波",
+    "folder": "zero-to-infinity"
+  }
+]

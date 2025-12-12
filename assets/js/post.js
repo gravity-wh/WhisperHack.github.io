@@ -36,7 +36,7 @@ async function init() {
 		}
 
 		hydrateMeta(postMeta);
-		await renderMarkdown(slug);
+		await renderMarkdown(postMeta);
 	} catch (error) {
 		console.error(error);
 		renderFallback("加载文章内容失败，请稍后再试。");
@@ -52,8 +52,22 @@ function hydrateMeta(postMeta) {
 	phaseEl.textContent = postMeta.phase || postMeta.status || "draft";
 }
 
-async function renderMarkdown(slugValue) {
-	const response = await fetch(`../content/posts/${slugValue}.md?v=${Date.now()}`);
+async function renderMarkdown(postMeta) {
+	// Support new column-based folder structure: content/posts/{column}/{slug}.md
+	// Falls back to flat structure: content/posts/{slug}.md
+	const column = postMeta.column;
+	const slugValue = postMeta.slug;
+	const basePath = column
+		? `../content/posts/${column}/${slugValue}.md`
+		: `../content/posts/${slugValue}.md`;
+	
+	let response = await fetch(`${basePath}?v=${Date.now()}`);
+	
+	// Fallback to flat structure if column path fails
+	if (!response.ok && column) {
+		response = await fetch(`../content/posts/${slugValue}.md?v=${Date.now()}`);
+	}
+	
 	if (!response.ok) {
 		throw new Error("无法加载 Markdown 正文");
 	}
