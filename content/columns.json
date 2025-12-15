@@ -82,5 +82,17 @@
     "description": "聚焦自然科学的灵感瞬间——从数学到天文的思想跃迁。",
     "tagline": "让万物规律跃迁成波",
     "folder": "zero-to-infinity"
+  },
+    {
+    "id": "tasty-food",
+    "name": "鲈鱼堪脍",
+    "englishTag": "TASTY-FOOD",
+    "frequency": 96.6,
+    "category": "food",
+    "categories": ["food"],
+    "emoji": "🍽️",
+    "description": "探索美食的艺术与科学，品味每一道佳肴背后的故事。",
+    "tagline": "在味蕾上谱写美味乐章",
+    "folder": "tasty-food"
   }
 ]

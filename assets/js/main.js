@@ -1,12 +1,13 @@
 const POSTS_ENDPOINT = "content/posts.json";
 const AUDIO_ENDPOINT = "content/audio.json";
+const COLUMNS_ENDPOINT = "content/columns.json";
 const LOCAL_AUDIO_BASE = "content/audio/";
 const RADIO_DEFAULT_FREQUENCY = "102.4 MHz";
 const INITIAL_DIAL_FREQUENCY = 102.4;
 const RADIO_DEFAULT_SEGMENT = "Sunset Radio";
 const RADIO_DEFAULT_HOST = "DJ Whisper";
 
-const PROGRAM_SCHEDULE = [
+const FALLBACK_PROGRAM_SCHEDULE = [
   {
     id: "chronos-heart",
     name: "时序之心",
@@ -82,17 +83,11 @@ const PROGRAM_SCHEDULE = [
   dialLabel: program.dialLabel || `FM ${program.frequency.toFixed(1)}`
 }));
 
-const PROGRAM_LOOKUP = buildProgramLookup(PROGRAM_SCHEDULE);
+let PROGRAM_SCHEDULE = FALLBACK_PROGRAM_SCHEDULE.slice();
+let PROGRAM_LOOKUP = buildProgramLookup(PROGRAM_SCHEDULE);
 const PROGRAM_INTENT_STORAGE_KEY = "sr-program-intent";
 
-const CATEGORY_CONFIG = [
-  { id: "all", label: "全部节目", icon: "📡" },
-  ...PROGRAM_SCHEDULE.map((program) => ({
-    id: program.id,
-    label: program.name,
-    icon: program.emoji
-  }))
-];
+let CATEGORY_CONFIG = buildCategoryConfig(PROGRAM_SCHEDULE);
 
 const LEGACY_CATEGORY_FALLBACK = {
   "ic-design": { label: "模拟 IC 设计", icon: "⚡" },
@@ -102,7 +97,8 @@ const LEGACY_CATEGORY_FALLBACK = {
   travel: { label: "飞行日记", icon: "✈️" },
   guitar: { label: "吉他与乐理", icon: "🎸" },
   "fin-tech": { label: "金融科技", icon: "💹" },
-  science: { label: "零到无穷", icon: "🪐" }
+  science: { label: "零到无穷", icon: "🪐" },
+  food: { label: "鲈鱼堪脍", icon: "🍽️" }
 };
 
 const state = {
@@ -133,11 +129,6 @@ const dom = {
   dialTrack: document.getElementById("dial-track")
 };
 
-const initialProgramIntent = dom.categoryBar ? detectInitialProgramIntent() : null;
-if (initialProgramIntent && PROGRAM_LOOKUP.byId.has(initialProgramIntent)) {
-  state.activeCategory = initialProgramIntent;
-}
-
 const audioElements = {
   audio: document.getElementById("bg-audio"),
   cover: document.getElementById("player-cover"),
@@ -166,15 +157,22 @@ const dialState = {
   step: 0.1,
   frequency: INITIAL_DIAL_FREQUENCY,
   postsByFrequency: new Map(),
-  programsByFrequency: new Map(PROGRAM_LOOKUP.byFrequency),
+  programsByFrequency: new Map(),
   availableFrequencies: [],
   hasSnapped: false,
-  activeProgram: PROGRAM_LOOKUP.byFrequency.get(INITIAL_DIAL_FREQUENCY.toFixed(1)) || null
+  activeProgram: null
 };
 
 init();
 
 async function init() {
+  await initPrograms();
+
+  const initialProgramIntent = dom.categoryBar ? detectInitialProgramIntent() : null;
+  if (initialProgramIntent && PROGRAM_LOOKUP.byId.has(initialProgramIntent)) {
+    state.activeCategory = initialProgramIntent;
+  }
+
   if (dom.categoryBar) {
     renderCategories();
   }
@@ -192,6 +190,75 @@ async function init() {
   if (tasks.length) {
     await Promise.allSettled(tasks);
   }
+}
+
+async function initPrograms() {
+  try {
+    const response = await fetch(`${COLUMNS_ENDPOINT}?v=${Date.now()}`);
+    if (!response.ok) throw new Error("无法加载栏目配置");
+    const columns = await response.json();
+    const schedule = buildProgramScheduleFromColumns(columns);
+    if (!schedule.length) throw new Error("栏目配置为空");
+    PROGRAM_SCHEDULE = schedule;
+  } catch (error) {
+    console.warn("Falling back to built-in program schedule", error);
+    PROGRAM_SCHEDULE = FALLBACK_PROGRAM_SCHEDULE.slice();
+  }
+
+  PROGRAM_LOOKUP = buildProgramLookup(PROGRAM_SCHEDULE);
+  CATEGORY_CONFIG = buildCategoryConfig(PROGRAM_SCHEDULE);
+  refreshDialPrograms();
+  updateDialUI();
+}
+
+function refreshDialPrograms() {
+  dialState.programsByFrequency = new Map(PROGRAM_LOOKUP.byFrequency);
+  dialState.activeProgram = PROGRAM_LOOKUP.byFrequency.get(dialState.frequency.toFixed(1)) || null;
+}
+
+function buildCategoryConfig(schedule) {
+  return [
+    { id: "all", label: "全部节目", icon: "📡" },
+    ...schedule.map((program) => ({
+      id: program.id,
+      label: program.name,
+      icon: program.emoji
+    }))
+  ];
+}
+
+function buildProgramScheduleFromColumns(columns) {
+  if (!Array.isArray(columns)) return [];
+  return columns
+    .map((column) => normalizeColumnProgram(column))
+    .filter(Boolean)
+    .map((program) => ({
+      ...program,
+      dialLabel: program.dialLabel || `FM ${program.frequency.toFixed(1)}`
+    }));
+}
+
+function normalizeColumnProgram(column) {
+  if (!column || typeof column !== "object") return null;
+  if (!column.id || !column.name) return null;
+  const frequency = typeof column.frequency === "number" ? column.frequency : parseFrequency(column.frequency);
+  if (!Number.isFinite(frequency)) return null;
+  const category = column.category || (Array.isArray(column.categories) ? column.categories[0] : null) || null;
+  const categories = Array.isArray(column.categories) && column.categories.length
+    ? column.categories
+    : (category ? [category] : []);
+  return {
+    id: String(column.id),
+    name: String(column.name),
+    englishTag: column.englishTag ? String(column.englishTag) : "",
+    frequency: Number(frequency.toFixed(1)),
+    category,
+    categories,
+    emoji: column.emoji ? String(column.emoji) : "📡",
+    description: column.description ? String(column.description) : "",
+    tagline: column.tagline ? String(column.tagline) : "",
+    folder: column.folder ? String(column.folder) : String(column.id)
+  };
 }
 
 function renderCategories() {
