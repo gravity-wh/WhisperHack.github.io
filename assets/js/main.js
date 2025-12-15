@@ -523,7 +523,12 @@ async function loadPosts() {
     const response = await fetch(`${POSTS_ENDPOINT}?v=${Date.now()}`);
     if (!response.ok) throw new Error("无法加载内容数据");
     const rawPosts = await response.json();
-    const decoratedPosts = decoratePostsWithPrograms(rawPosts);
+    // 默认只展示已发布/已投放的文章（status === 'shipped')。
+    // 这样你可以通过把条目状态改为 'building'/'draft' 等来达到“注释掉”的效果。
+    const visible = Array.isArray(rawPosts)
+      ? rawPosts.filter((p) => String(p.status || "").toLowerCase() === "shipped")
+      : [];
+    const decoratedPosts = decoratePostsWithPrograms(visible);
     state.posts = decoratedPosts;
     renderPosts();
     syncAudioWithCategory();

@@ -49,7 +49,7 @@ function hydrateMeta(postMeta) {
 	dateEl.textContent = formatDate(postMeta.date);
 	tagsEl.textContent = (postMeta.tags || []).join(" · ") || "Untitled";
 	readingEl.textContent = postMeta.readingTime || "--";
-	phaseEl.textContent = postMeta.phase || postMeta.status || "draft";
+	phaseEl.textContent = postMeta.status || "draft";
 }
 
 async function renderMarkdown(postMeta) {

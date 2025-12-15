@@ -61,7 +61,7 @@
   },
   {
     "id": "all-counterpoise",
-    "name": "万象对冲",
+    "name": "万象衡",
     "englishTag": "ALL-COUNTERPOISE",
     "frequency": 97.3,
     "category": "fin-tech",
@@ -83,7 +83,7 @@
     "tagline": "让万物规律跃迁成波",
     "folder": "zero-to-infinity"
   },
-    {
+  {
     "id": "tasty-food",
     "name": "鲈鱼堪脍",
     "englishTag": "TASTY-FOOD",
@@ -94,5 +94,17 @@
     "description": "探索美食的艺术与科学，品味每一道佳肴背后的故事。",
     "tagline": "在味蕾上谱写美味乐章",
     "folder": "tasty-food"
+  },
+  {
+    "id": "civic-prism",
+    "name": "公民棱镜",
+    "englishTag": "CIVIC-PRISM",
+    "frequency": 98.6,
+    "category": "humanism",
+    "categories": ["humanism"],
+    "emoji": "🌊",
+    "description": "探讨人文与社会议题，捕捉时代的脉动与变迁。",
+    "tagline": "在时代浪潮中寻找方向",
+    "folder": "civic-prism"
   }
 ]

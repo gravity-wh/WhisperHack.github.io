@@ -7,9 +7,7 @@
     "summary": "根据公开资料整理的Kirin9030处理器的制造工艺流程与关键技术节点。",
     "tags": ["IC", "Processor", "Manufacturing"],
     "readingTime": "15 min",
-    "status": "shipped",
-    "phase": "broadcast",
-    "featured": true
+    "status": "shipped"
   },
   {
     "slug": "uvm-testbench-guide",
@@ -19,9 +17,7 @@
     "summary": "针对初学者的数字验证入门指南，拆解 Agent、Driver、Monitor 与 Scoreboard 的连接逻辑。",
     "tags": ["Verification", "UVM"],
     "readingTime": "20 min",
-    "status": "building",
-    "phase": "build",
-    "featured": true
+    "status": "shipped"
   },
   {
     "slug": "PLL-design",
@@ -31,9 +27,7 @@
     "summary": "锁相环（PLL）的基本原理与设计要点，涵盖环路滤波器、鉴相器及频率合成技术。",
     "tags": ["PLL", "Analog"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "Adaptive-Filter-systemdesign",
@@ -43,9 +37,7 @@
     "summary": "自适应滤波器的基本原理与系统设计，涵盖LMS算法、RLS算法。",
     "tags": ["FIR", "LMS", "RLS"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "Adaptive-Fliter-class",
@@ -55,21 +47,17 @@
     "summary": "自适应滤波器的基本原理与系统设计。",
     "tags": ["FIR", "LMS", "RLS"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "nanjing-mountains-notes",
     "column": "endless-steps",
-    "title": "南京群山记事",
+    "title": "南京群山记",
     "date": "2025-07-05",
     "summary": "环宁皆山也。从紫金山到牛首山，记录穿行于南京群山的点滴。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "shipped",
-    "phase": "notes",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "rag-langchain-lab",
@@ -79,9 +67,7 @@
     "summary": "借助 LangChain 与向量数据库构建私有知识库问答系统，抑制幻觉并监控检索质量。",
     "tags": ["AI", "RAG"],
     "readingTime": "12 min",
-    "status": "building",
-    "phase": "experiment",
-    "featured": true
+    "status": "shipped"
   },
   {
     "slug": "Nyquist_sampling_AGI",
@@ -91,9 +77,7 @@
     "summary": "灵感来源于一篇关于奈奎斯特采样定理的文章，尝试将其与人工通用智能（AGI）的概念联系起来。",
     "tags": ["AGI", "Nyquist Sampling", "AI"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "SWE-agent",
@@ -103,9 +87,7 @@
     "summary": "CS的今天无疑就是EE的明天，SWE-agent会是EE跨入AI时代的版本答案吗？",
     "tags": ["SWE-agent", "EE", "AI"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "Gemini-changed-my-world",
@@ -115,9 +97,7 @@
     "summary": "新的生产生活范式即将到来，未来会是什么样？",
     "tags": ["AI"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "guitar-blues-pentatonic-scale",
@@ -127,9 +107,7 @@
     "summary": "布鲁斯五声音阶在吉他演奏中的重要性及其应用技巧。",
     "tags": ["Guitar", "Theory"],
     "readingTime": "10 min",
-    "status": "shipped",
-    "phase": "study",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "reading-red-and-black",
@@ -139,9 +117,7 @@
     "summary": "《红与黑》不仅是一部爱情小说，更是一部关于野心与社会阶层的深刻剖析。",
     "tags": ["Reading"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "FPGA-high-frequency-trading",
@@ -151,9 +127,7 @@
     "summary": "FPGA在高频交易系统中的关键作用及其实现方法。",
     "tags": ["FPGA", "HFT", "Low-latency"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "altcoin-blockchain-overview",
@@ -163,9 +137,7 @@
     "summary": "山寨币的起源、发展及其在区块链生态系统中的作用。",
     "tags": ["Altcoin", "Blockchain", "Cryptocurrency"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "Fractal_Geometry",
@@ -175,21 +147,17 @@
     "summary": "听了菲尔兹获得者Hugo Duminil-Copin的汇报,第一次接触到随机分形的相关研究。此文作为一个简短的记录总结。",
     "tags": ["Fractal", "Geometry", "Random Walk"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "Dairy_Product_Standards",
     "column": "tasty-food",
     "title": "常见鲜奶和酸奶的产品标准",
     "date": "2025-12-14",
-    "summary": "本文对比了市面上常见鲜奶和酸奶的产品标准，帮助大家更好地了解和选择乳制品。",
+    "summary": "本文对比了市面上常见鲜奶的产品标准，希望下一次可以选到好喝的鲜奶。",
     "tags": ["Dairy", "Standards", "Food"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "Cellular_Automata_Rule90_vs_Rule110",
@@ -199,9 +167,7 @@
     "summary": "Rule90和Rule110，两种一维元胞自动机的对比与分析。",
     "tags": ["Cellular Automata", "Rule90", "Rule110"],
     "readingTime": "6 min",
-    "status": "shipped",
-    "phase": "note",
-    "featured": false
+    "status": "shipped"
   },
   {
     "slug": "river-and-hydrology-of-Nanjing",
@@ -211,9 +177,18 @@
     "summary": "江河湖海，水系纵横。南京的水文地理与城市发展息息相关。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "shipped",
-    "phase": "notes",
-    "featured": false
+    "status": "shipped"
+  },
+  {
+    "slug": "freedom-and-fairness",
+    "column": "civic-prism",
+    "title": "自由与公平：社会元议题的探讨",
+    "date": "2025-12-16",
+    "summary": "左和右的分野背后，是自由与公平两种价值尺度冲撞后的无奈。",
+    "tags": ["Humanism", "Society"],
+    "readingTime": "8 min",
+    "status": "shipped"
   }
+
 ]
 
