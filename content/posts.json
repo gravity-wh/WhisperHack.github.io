@@ -57,7 +57,7 @@
     "summary": "环宁皆山也。从紫金山到牛首山，记录穿行于南京群山的点滴。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "rag-langchain-lab",
@@ -67,7 +67,7 @@
     "summary": "借助 LangChain 与向量数据库构建私有知识库问答系统，抑制幻觉并监控检索质量。",
     "tags": ["AI", "RAG"],
     "readingTime": "12 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "Nyquist_sampling_AGI",
@@ -87,7 +87,7 @@
     "summary": "CS的今天无疑就是EE的明天，SWE-agent会是EE跨入AI时代的版本答案吗？",
     "tags": ["SWE-agent", "EE", "AI"],
     "readingTime": "6 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "Gemini-changed-my-world",
@@ -97,7 +97,7 @@
     "summary": "新的生产生活范式即将到来，未来会是什么样？",
     "tags": ["AI"],
     "readingTime": "6 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "guitar-blues-pentatonic-scale",
@@ -107,7 +107,7 @@
     "summary": "布鲁斯五声音阶在吉他演奏中的重要性及其应用技巧。",
     "tags": ["Guitar", "Theory"],
     "readingTime": "10 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "reading-red-and-black",
@@ -117,7 +117,7 @@
     "summary": "《红与黑》不仅是一部爱情小说，更是一部关于野心与社会阶层的深刻剖析。",
     "tags": ["Reading"],
     "readingTime": "6 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "FPGA-high-frequency-trading",
@@ -127,7 +127,7 @@
     "summary": "FPGA在高频交易系统中的关键作用及其实现方法。",
     "tags": ["FPGA", "HFT", "Low-latency"],
     "readingTime": "6 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "altcoin-blockchain-overview",
@@ -137,7 +137,7 @@
     "summary": "山寨币的起源、发展及其在区块链生态系统中的作用。",
     "tags": ["Altcoin", "Blockchain", "Cryptocurrency"],
     "readingTime": "6 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "Fractal_Geometry",
@@ -157,7 +157,7 @@
     "summary": "本文对比了市面上常见鲜奶的产品标准，希望下一次可以选到好喝的鲜奶。",
     "tags": ["Dairy", "Standards", "Food"],
     "readingTime": "6 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "Cellular_Automata_Rule90_vs_Rule110",
@@ -177,7 +177,7 @@
     "summary": "江河湖海，水系纵横。南京的水文地理与城市发展息息相关。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "freedom-and-fairness",
