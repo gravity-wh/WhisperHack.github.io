@@ -198,6 +198,16 @@
     "tags": ["Blog", "Personal Website"],
     "readingTime": "8 min",
     "status": "shipped"
+  },
+  {
+    "slug": "git",
+    "column": "chronos-heart",
+    "title": "Git 是如何工作的？",
+    "date": "2025-12-17",
+    "summary": "最近看到了很多关于Git的Meme，开始意识到版本控制并非想象中那么简单。",
+    "tags": ["Git", "Version Control"],
+    "readingTime": "8 min",
+    "status": "building"
   }
 ]
 
