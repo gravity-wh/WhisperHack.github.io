@@ -131,6 +131,7 @@ const dom = {
 
 const audioElements = {
   audio: document.getElementById("bg-audio"),
+  player: document.getElementById("player"),
   cover: document.getElementById("player-cover"),
   title: document.getElementById("player-title"),
   subtitle: document.getElementById("player-subtitle"),
@@ -161,6 +162,26 @@ const dialState = {
   availableFrequencies: [],
   hasSnapped: false,
   activeProgram: null
+};
+
+const inputTuning = {
+  dialDragPixelsPerStep: 20,
+  categoryWheelMultiplier: 0.9,
+  playerAutoCollapseDelayMs: 5200
+};
+
+const dialGestureState = {
+  active: false,
+  pointerId: null,
+  startX: 0,
+  startY: 0,
+  startFrequency: INITIAL_DIAL_FREQUENCY,
+  hasHorizontalIntent: false
+};
+
+const playerUIState = {
+  collapseTimer: null,
+  lastInteractionAt: 0
 };
 
 init();
@@ -310,6 +331,8 @@ function bindEventListeners() {
       const category = button.dataset.category;
       setActiveCategory(category, { alignDial: true });
     });
+
+    dom.categoryBar.addEventListener("wheel", handleCategoryWheel, { passive: false });
   }
 
   const handleSearch = (value) => {
@@ -366,10 +389,24 @@ function bindEventListeners() {
 
   audioElements.toggle?.addEventListener("click", togglePlayback);
   audioElements.next?.addEventListener("click", playNextTrack);
+
+  audioElements.player?.addEventListener("pointerdown", () => markPlayerInteraction());
+  audioElements.player?.addEventListener("focusin", () => markPlayerInteraction());
+  audioElements.player?.addEventListener("click", (event) => {
+    if (!audioElements.player) return;
+    if (!audioElements.player.classList.contains("is-collapsed")) return;
+    // Restore when collapsed; ignore clicks when expanded.
+    event.preventDefault();
+    expandPlayer();
+    schedulePlayerAutoCollapse();
+  });
+
   audioElements.progress?.addEventListener("input", () => {
     audioState.isSeeking = true;
+    markPlayerInteraction();
   });
   audioElements.progress?.addEventListener("change", () => {
+    markPlayerInteraction();
     if (!audioElements.audio.duration) return;
     const percentage = Number(audioElements.progress.value) / 100;
     audioElements.audio.currentTime = percentage * audioElements.audio.duration;
@@ -382,14 +419,130 @@ function bindEventListeners() {
     audioElements.progress.value = progress.toString();
   });
 
+  audioElements.audio?.addEventListener("playing", () => {
+    if (!audioElements.player) return;
+    audioElements.player.classList.add("is-playing");
+    expandPlayer();
+    schedulePlayerAutoCollapse();
+  });
+
+  audioElements.audio?.addEventListener("pause", () => {
+    if (!audioElements.player) return;
+    audioElements.player.classList.remove("is-playing");
+    expandPlayer();
+  });
+
   audioElements.audio?.addEventListener("ended", playNextTrack);
 }
 
 function setupDial() {
   if (!dom.dialTrack) return;
   dom.dialTrack.addEventListener("wheel", handleDialScroll, { passive: false });
+  dom.dialTrack.addEventListener("pointerdown", handleDialPointerDown);
+  dom.dialTrack.addEventListener("pointermove", handleDialPointerMove);
+  dom.dialTrack.addEventListener("pointerup", handleDialPointerEnd);
+  dom.dialTrack.addEventListener("pointercancel", handleDialPointerEnd);
   dom.dialTrack.addEventListener("keydown", handleDialKeydown);
   updateDialUI();
+}
+
+function handleDialPointerDown(event) {
+  if (!dom.dialTrack) return;
+  if (dialGestureState.active) return;
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  dialGestureState.active = true;
+  dialGestureState.pointerId = event.pointerId;
+  dialGestureState.startX = event.clientX;
+  dialGestureState.startY = event.clientY;
+  dialGestureState.startFrequency = dialState.frequency;
+  dialGestureState.hasHorizontalIntent = false;
+  dom.dialTrack.setPointerCapture?.(event.pointerId);
+}
+
+function handleDialPointerMove(event) {
+  if (!dialGestureState.active) return;
+  if (dialGestureState.pointerId !== event.pointerId) return;
+  const dx = event.clientX - dialGestureState.startX;
+  const dy = event.clientY - dialGestureState.startY;
+
+  if (!dialGestureState.hasHorizontalIntent) {
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+    if (absX < 6 && absY < 6) return;
+    if (absX <= absY) return;
+    dialGestureState.hasHorizontalIntent = true;
+  }
+
+  event.preventDefault();
+  const deltaSteps = dx / inputTuning.dialDragPixelsPerStep;
+  const next = dialGestureState.startFrequency + deltaSteps * dialState.step;
+  setDialFrequency(next);
+}
+
+function handleDialPointerEnd(event) {
+  if (!dialGestureState.active) return;
+  if (dialGestureState.pointerId !== event.pointerId) return;
+  dialGestureState.active = false;
+  dialGestureState.pointerId = null;
+  dialGestureState.hasHorizontalIntent = false;
+}
+
+function handleCategoryWheel(event) {
+  if (!dom.categoryBar) return;
+  const el = dom.categoryBar;
+  if (el.scrollWidth <= el.clientWidth) return;
+
+  const rawDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+    ? event.deltaX
+    : event.deltaY;
+  if (!rawDelta) return;
+
+  // Normalize wheel delta across browsers.
+  let delta = rawDelta;
+  if (event.deltaMode === 1) {
+    delta *= 16;
+  } else if (event.deltaMode === 2) {
+    delta *= el.clientWidth;
+  }
+
+  event.preventDefault();
+  el.scrollLeft += delta * inputTuning.categoryWheelMultiplier;
+}
+
+function markPlayerInteraction() {
+  playerUIState.lastInteractionAt = Date.now();
+  if (audioElements.player?.classList.contains("is-collapsed")) {
+    expandPlayer();
+  }
+  schedulePlayerAutoCollapse();
+}
+
+function schedulePlayerAutoCollapse() {
+  if (!audioElements.player) return;
+  if (!audioState.isPlaying) return;
+  if (playerUIState.collapseTimer) {
+    clearTimeout(playerUIState.collapseTimer);
+  }
+  const scheduledAt = Date.now();
+  playerUIState.collapseTimer = setTimeout(() => {
+    if (!audioState.isPlaying) return;
+    const last = playerUIState.lastInteractionAt || scheduledAt;
+    if (Date.now() - last < inputTuning.playerAutoCollapseDelayMs) {
+      schedulePlayerAutoCollapse();
+      return;
+    }
+    collapsePlayer();
+  }, inputTuning.playerAutoCollapseDelayMs);
+}
+
+function collapsePlayer() {
+  if (!audioElements.player) return;
+  audioElements.player.classList.add("is-collapsed");
+}
+
+function expandPlayer() {
+  if (!audioElements.player) return;
+  audioElements.player.classList.remove("is-collapsed");
 }
 
 function handleDialScroll(event) {

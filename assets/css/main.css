@@ -249,6 +249,8 @@ main {
   align-items: center;
   cursor: ew-resize;
   transition: box-shadow 0.25s ease;
+  touch-action: pan-y;
+  user-select: none;
 }
 
 .sr-dial__track:focus-visible {
@@ -368,6 +370,8 @@ main {
   overflow-x: auto;
   padding: 0.5rem 0.75rem;
   scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .sr-category {
@@ -598,6 +602,16 @@ main {
   width: min(360px, calc(100% - 2rem));
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
   backdrop-filter: blur(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+}
+
+@keyframes sr-vinyl-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .sr-player__cover {
@@ -612,6 +626,24 @@ main {
   overflow: hidden;
   background-size: cover;
   background-position: center;
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+}
+
+.sr-player__cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.0) 0,
+    rgba(0, 0, 0, 0.0) 6px,
+    rgba(0, 0, 0, 0.14) 7px,
+    rgba(0, 0, 0, 0.0) 9px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .sr-player__cover::after {
@@ -620,6 +652,47 @@ main {
   inset: 30%;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
+}
+
+.sr-player.is-playing .sr-player__cover {
+  animation: sr-vinyl-spin 4s linear infinite;
+}
+
+.sr-player.is-collapsed {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transform: translateY(6px) scale(0.98);
+  width: auto;
+  padding: 0.35rem;
+  gap: 0;
+  pointer-events: auto;
+}
+
+.sr-player.is-collapsed .sr-player__cover {
+  opacity: 0.7;
+  filter: saturate(0.6) contrast(1.05);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+}
+
+.sr-player.is-collapsed .sr-player__cover::before {
+  opacity: 1;
+}
+
+.sr-player.is-collapsed .sr-player__info,
+.sr-player.is-collapsed .sr-player__controls,
+.sr-player.is-collapsed .sr-player__mood {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-player.is-playing .sr-player__cover {
+    animation: none;
+  }
 }
 
 .sr-player__info {
@@ -982,6 +1055,11 @@ main {
     left: 1rem;
     right: 1rem;
     bottom: 1rem;
+  }
+
+  .sr-player.is-collapsed {
+    left: auto;
+    right: 1rem;
   }
 }
 
