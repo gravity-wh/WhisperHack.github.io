@@ -27,7 +27,8 @@ async function init() {
 	}
 
 	try {
-		const meta = await fetch(`../content/posts.json?v=${Date.now()}`).then((res) => res.json());
+		const metaUrl = buildAssetUrl("../content/posts.json", { v: Date.now() });
+		const meta = await fetch(metaUrl).then((res) => res.json());
 		const postMeta = meta.find((item) => item.slug === slug);
 
 		if (!postMeta) {
@@ -41,6 +42,15 @@ async function init() {
 		console.error(error);
 		renderFallback("加载文章内容失败，请稍后再试。");
 	}
+}
+
+function buildAssetUrl(pathname, query = {}) {
+	const url = new URL(pathname, document.baseURI);
+	Object.entries(query).forEach(([key, value]) => {
+		if (value === undefined || value === null) return;
+		url.searchParams.set(key, String(value));
+	});
+	return url.toString();
 }
 
 function hydrateMeta(postMeta) {
@@ -60,12 +70,12 @@ async function renderMarkdown(postMeta) {
 	const basePath = column
 		? `../content/posts/${column}/${slugValue}.md`
 		: `../content/posts/${slugValue}.md`;
-	
-	let response = await fetch(`${basePath}?v=${Date.now()}`);
+
+	let response = await fetch(buildAssetUrl(basePath, { v: Date.now() }));
 	
 	// Fallback to flat structure if column path fails
 	if (!response.ok && column) {
-		response = await fetch(`../content/posts/${slugValue}.md?v=${Date.now()}`);
+		response = await fetch(buildAssetUrl(`../content/posts/${slugValue}.md`, { v: Date.now() }));
 	}
 	
 	if (!response.ok) {
