@@ -187,8 +187,17 @@
     "summary": "左和右的分野背后，是自由与公平两种价值尺度冲撞后的无奈。",
     "tags": ["Humanism", "Society"],
     "readingTime": "8 min",
+    "status": "building"
+  },
+  {
+    "slug": "marking-territory",
+    "column": "civic-prism",
+    "title": "开服纪念：在赛博空间标记了一片领地",
+    "date": "2025-12-16",
+    "summary": "从Nov23到Dec16，历时23天完成了个人博客主页从无到有的搭建。",
+    "tags": ["Blog", "Personal Website"],
+    "readingTime": "8 min",
     "status": "shipped"
   }
-
 ]
 
