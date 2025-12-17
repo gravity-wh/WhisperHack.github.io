@@ -218,7 +218,15 @@
     "tags": ["Networking", "Blog Deployment"],
     "readingTime": "8 min",
     "status": "shipped"    
+  },
+  {
+    "slug": "IoT-Smart-Parking-System",
+    "column": "chronos-heart",
+    "title": "一种物联网智慧停车系统及其远程升级设计",
+    "date": "2025-12-19",
+    "summary": "基于物联网的智慧停车系统得到了广泛的应用，可以实时探测车位的车辆是否被占用，并显示剩余车辆数量。",
+    "tags": ["IoT", "Smart Parking", "Remote Upgrade"],
+    "readingTime": "8 min",
+    "status": "shipped"
   }
-
 ]
-
