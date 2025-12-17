@@ -8,13 +8,14 @@ const GITHUB_SECRET = 'Wh190125';
 const EXPECTED_REF = 'refs/heads/main';
 const LOG_FILE = __DIR__ . '/deploy.log';
 const REPO_DIR = __DIR__;
+const LOCK_FILE = __DIR__ . '/deploy.lock';
 
 function logMessage(string $message): void
 {
 	file_put_contents(LOG_FILE, '[' . date('c') . '] ' . $message . PHP_EOL, FILE_APPEND | LOCK_EX);
 }
 
-function sendResponse(int $statusCode, array $payload): never
+function sendResponse(int $statusCode, array $payload): void
 {
 	http_response_code($statusCode);
 	header('Content-Type: application/json');
@@ -22,7 +23,28 @@ function sendResponse(int $statusCode, array $payload): never
 	exit;
 }
 
-function runCommand(string $command): array
+function getWebhookSecret(): string
+{
+	$envSecret = getenv('GITHUB_WEBHOOK_SECRET');
+	if (is_string($envSecret) && $envSecret !== '') {
+		return $envSecret;
+	}
+	return GITHUB_SECRET;
+}
+
+function normalizeSignature(string $signature): array
+{
+	$signature = trim($signature);
+	if ($signature === '') {
+		return ['', ''];
+	}
+	if (!preg_match('/^(sha1|sha256)=([0-9a-f]{40}|[0-9a-f]{64})$/i', $signature, $matches)) {
+		return ['', ''];
+	}
+	return [strtolower($matches[1]), strtolower($matches[2])];
+}
+
+function runCommand(string $command, array $env = []): array
 {
 	$descriptor = [
 		['pipe', 'r'],
@@ -30,9 +52,21 @@ function runCommand(string $command): array
 		['pipe', 'w'],
 	];
 
-	$process = proc_open($command, $descriptor, $pipes, REPO_DIR);
+	$baseEnv = array_merge($_ENV, [
+		'GIT_TERMINAL_PROMPT' => '0',
+		'GIT_ASKPASS' => 'echo',
+	], $env);
+
+	// Windows/IIS often needs an explicit shell.
+	if (DIRECTORY_SEPARATOR === '\\') {
+		$command = 'cmd /d /s /c ' . escapeshellarg($command);
+	} else {
+		$command = '/bin/sh -lc ' . escapeshellarg($command);
+	}
+
+	$process = proc_open($command, $descriptor, $pipes, REPO_DIR, $baseEnv);
 	if (!is_resource($process)) {
-		return [1, ['failed to start ' . $command]];
+		return [1, ['failed to start command']];
 	}
 
 	fclose($pipes[0]);
@@ -42,14 +76,24 @@ function runCommand(string $command): array
 	fclose($pipes[2]);
 
 	$exitCode = proc_close($process);
-	$output = array_filter(array_map('trim', explode(PHP_EOL, $stdout . PHP_EOL . $stderr)));
+	$output = array_filter(array_map('trim', preg_split('/\R/', $stdout . "\n" . $stderr) ?: []));
 
-	return [$exitCode, $output];
+	return [$exitCode, array_values($output)];
 }
 
 $payload = file_get_contents('php://input') ?: '';
 $signature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? $_SERVER['HTTP_X_HUB_SIGNATURE'] ?? '';
 $event = $_SERVER['HTTP_X_GITHUB_EVENT'] ?? 'unknown';
+$delivery = $_SERVER['HTTP_X_GITHUB_DELIVERY'] ?? 'unknown';
+
+if (!function_exists('proc_open')) {
+	logMessage('proc_open is disabled | event=' . $event . ' | delivery=' . $delivery);
+	sendResponse(500, ['status' => 'error', 'reason' => 'Server does not allow executing commands (proc_open disabled)']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+	sendResponse(200, ['status' => 'ok', 'message' => 'deploy endpoint alive']);
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	sendResponse(405, ['status' => 'error', 'reason' => 'Only POST is allowed']);
@@ -63,10 +107,17 @@ if ($signature === '') {
 	sendResponse(403, ['status' => 'error', 'reason' => 'Missing signature']);
 }
 
-$algo = str_contains($signature, 'sha256=') ? 'sha256' : 'sha1';
-$expected = $algo . '=' . hash_hmac($algo, $payload, GITHUB_SECRET);
-if (!hash_equals($expected, $signature)) {
-	logMessage('Signature mismatch for event ' . $event);
+
+[$algo, $sigHash] = normalizeSignature($signature);
+if ($algo === '' || $sigHash === '') {
+	logMessage('Invalid signature format | event=' . $event . ' | delivery=' . $delivery);
+	sendResponse(403, ['status' => 'error', 'reason' => 'Invalid signature format']);
+}
+
+$secret = getWebhookSecret();
+$expectedHash = hash_hmac($algo, $payload, $secret);
+if (!hash_equals($expectedHash, $sigHash)) {
+	logMessage('Signature mismatch | event=' . $event . ' | delivery=' . $delivery);
 	sendResponse(403, ['status' => 'error', 'reason' => 'Invalid signature']);
 }
 
@@ -83,10 +134,42 @@ if (($data['ref'] ?? null) !== EXPECTED_REF) {
 	sendResponse(202, ['status' => 'ignored', 'reason' => 'Not the main branch']);
 }
 
+$lockHandle = fopen(LOCK_FILE, 'c');
+if ($lockHandle === false) {
+	sendResponse(500, ['status' => 'error', 'reason' => 'Unable to open lock file']);
+}
+
+if (!flock($lockHandle, LOCK_EX | LOCK_NB)) {
+	sendResponse(429, ['status' => 'busy', 'reason' => 'Deployment already running']);
+}
+
+$git = getenv('GIT_BINARY');
+if (!is_string($git) || $git === '') {
+	$git = 'git';
+}
+
+if ($git === 'git' && DIRECTORY_SEPARATOR === '\\') {
+	$candidates = [
+		'\\Program Files\\Git\\cmd\\git.exe',
+		'\\Program Files\\Git\\bin\\git.exe',
+		'\\Program Files (x86)\\Git\\cmd\\git.exe',
+		'\\Program Files (x86)\\Git\\bin\\git.exe',
+	];
+	foreach ($candidates as $suffix) {
+		$path = getenv('SystemDrive') . $suffix;
+		if (is_string($path) && $path !== '' && is_file($path)) {
+			$git = '"' . $path . '"';
+			break;
+		}
+	}
+}
+
+$safe = '-c safe.directory=' . escapeshellarg(REPO_DIR);
+
 $commands = [
-	'git fetch origin main --tags --force',
-	'git reset --hard origin/main',
-	'git clean -fd',
+	$git . ' ' . $safe . ' fetch --prune --tags --force origin main',
+	$git . ' ' . $safe . ' reset --hard origin/main',
+	$git . ' ' . $safe . ' clean -fdx',
 ];
 
 $results = [];
@@ -98,14 +181,19 @@ foreach ($commands as $command) {
 
 	if ($exitCode !== 0) {
 		$failed = true;
-		logMessage('Command failed: ' . $command . ' | exit=' . $exitCode);
+		logMessage('Command failed | event=' . $event . ' | delivery=' . $delivery . ' | cmd=' . $command . ' | exit=' . $exitCode);
 		break;
 	}
 }
 
 if ($failed) {
+	flock($lockHandle, LOCK_UN);
+	fclose($lockHandle);
 	sendResponse(500, ['status' => 'error', 'results' => $results]);
 }
 
-logMessage('Deployment completed from ' . ($data['head_commit']['id'] ?? 'unknown commit'));
+logMessage('Deployment completed | delivery=' . $delivery . ' | commit=' . ($data['head_commit']['id'] ?? 'unknown commit'));
+
+flock($lockHandle, LOCK_UN);
+fclose($lockHandle);
 sendResponse(200, ['status' => 'success', 'results' => $results]);
