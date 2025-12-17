@@ -106,5 +106,21 @@
     "description": "探讨人文与社会议题，捕捉时代的脉动与变迁。",
     "tagline": "在时代浪潮中寻找方向",
     "folder": "civic-prism"
+  },
+  {
+    "id": "computer-science",
+    "name": "408",
+    "englishTag": "COMPUTER-SCIENCE",
+    "frequency": 99.6,
+    "category": "CS",
+    "categories": ["CS"],
+    "emoji": "💻",
+    "description": "建议计组、计网、操作系统纳入义务教育。",
+    "tagline": "让计算机科学成为全民必修课",
+    "folder": "computer-science"
   }
+  
+
+  
+
 ]

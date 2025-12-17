@@ -161,7 +161,7 @@
   },
   {
     "slug": "Cellular_Automata_Rule90_vs_Rule110",
-    "column": "zero-to-infinity",
+    "column": "computer-science",
     "title": "元胞自动机：Rule90 与 Rule110 的对比分析",
     "date": "2025-12-9",
     "summary": "Rule90和Rule110，两种一维元胞自动机的对比与分析。",
@@ -201,13 +201,24 @@
   },
   {
     "slug": "git",
-    "column": "chronos-heart",
+    "column": "computer-science",
     "title": "Git 是如何工作的？",
     "date": "2025-12-17",
     "summary": "最近看到了很多关于Git的Meme，开始意识到版本控制并非想象中那么简单。",
     "tags": ["Git", "Version Control"],
     "readingTime": "8 min",
     "status": "shipped"
+  },
+  {
+    "slug": "CS-Networking",
+    "column": "computer-science",
+    "title": "搭建博客的过程让我重新学了一遍计网",
+    "date": "2025-12-18",
+    "summary": "从域名注册到服务器部署，个人博客的搭建过程让我重新认识了计算机网络的基础知识。",
+    "tags": ["Networking", "Blog Deployment"],
+    "readingTime": "8 min",
+    "status": "shipped"    
   }
+
 ]
 
