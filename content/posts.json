@@ -7,7 +7,7 @@
     "summary": "根据公开资料整理的Kirin9030处理器的制造工艺流程与关键技术节点。",
     "tags": ["IC", "Processor", "Manufacturing"],
     "readingTime": "15 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "uvm-testbench-guide",
