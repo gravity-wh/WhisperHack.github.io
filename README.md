@@ -48,6 +48,29 @@ Sunset Radio（落日电台）的前端已经完全重构为“频率广播”�
 
 4. 打开仓库的 **Settings → Pages**，确认 Source 已指向 `main / (root)`。几分钟后即可通过 `https://WhisperHack.github.io` 访问。
 
+## （可选）本地服务器：GitHub Webhook 自动拉取
+
+如果你把本仓库放在自己的服务器（IIS/Apache/Nginx 均可）并希望 **push 后自动拉取更新**，可以使用根目录的 [deploy.php](deploy.php)。
+
+**服务端前提**
+
+- PHP 允许执行命令（`proc_open` 未被禁用）。
+- 服务器已安装 Git；如果 Git 不在 PATH，可设置环境变量 `GIT_BINARY` 为 git 可执行文件的绝对路径。
+- Web 站点进程对仓库目录有读写权限（至少能写入 `deploy.log` 和 `deploy.lock`）。
+
+**GitHub 仓库配置（Settings → Webhooks）**
+
+- Payload URL：`https://<你的域名>/deploy.php`
+- Content type：`application/json`
+- Secret：与 `deploy.php` 中的 `GITHUB_SECRET` 一致，或在服务器设置 `GITHUB_WEBHOOK_SECRET`（推荐：用环境变量并定期轮换）
+- 事件：只勾选 `push`
+
+**快速自检**
+
+- 访问 `GET /deploy.php` 应返回 `{ "status": "ok" }`。
+- 在服务器上运行 [tools/test-webhook.ps1](tools/test-webhook.ps1) 可以本地模拟一次 GitHub push webhook（会生成正确的 `X-Hub-Signature-256`）。
+- 失败时查看 `deploy.log`，其中会记录 delivery id、失败命令和退出码。
+
 ## 自定义方向
 
 - **配色 / 字体**：在 `assets/css/main.css` 的 `:root` 里调整主色与字体。

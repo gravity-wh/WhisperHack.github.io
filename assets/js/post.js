@@ -28,7 +28,11 @@ async function init() {
 
 	try {
 		const metaUrl = buildAssetUrl("../content/posts.json", { v: Date.now() });
-		const meta = await fetch(metaUrl).then((res) => res.json());
+		const metaRes = await fetch(metaUrl, { cache: "no-store" });
+		if (!metaRes.ok) {
+			throw new Error(`无法加载 posts.json：${metaRes.status} ${metaRes.statusText}`);
+		}
+		const meta = await metaRes.json();
 		const postMeta = meta.find((item) => item.slug === slug);
 
 		if (!postMeta) {
@@ -40,7 +44,7 @@ async function init() {
 		await renderMarkdown(postMeta);
 	} catch (error) {
 		console.error(error);
-		renderFallback("加载文章内容失败，请稍后再试。");
+		renderFallback("加载文章内容失败，请稍后再试。（可打开控制台查看具体请求与状态码）");
 	}
 }
 
@@ -71,15 +75,15 @@ async function renderMarkdown(postMeta) {
 		? `../content/posts/${column}/${slugValue}.md`
 		: `../content/posts/${slugValue}.md`;
 
-	let response = await fetch(buildAssetUrl(basePath, { v: Date.now() }));
+	let response = await fetch(buildAssetUrl(basePath, { v: Date.now() }), { cache: "no-store" });
 	
 	// Fallback to flat structure if column path fails
 	if (!response.ok && column) {
-		response = await fetch(buildAssetUrl(`../content/posts/${slugValue}.md`, { v: Date.now() }));
+		response = await fetch(buildAssetUrl(`../content/posts/${slugValue}.md`, { v: Date.now() }), { cache: "no-store" });
 	}
 	
 	if (!response.ok) {
-		throw new Error("无法加载 Markdown 正文");
+		throw new Error(`无法加载 Markdown 正文：${response.status} ${response.statusText}`);
 	}
 	const markdown = await response.text();
 	const html = window.marked.parse(markdown);
