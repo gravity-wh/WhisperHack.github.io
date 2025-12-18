@@ -52,12 +52,12 @@
   {
     "slug": "nanjing-mountains-notes",
     "column": "endless-steps",
-    "title": "南京群山记",
-    "date": "2025-07-05",
-    "summary": "环宁皆山也。从紫金山到牛首山，记录穿行于南京群山的点滴。",
+    "title": "江宁近郊山野鉴",
+    "date": "2025-12-05",
+    "summary": "环宁皆山也。从方山到牛首山，记录穿行于南京群山的点滴。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "building"
+    "status": "shipped"
   },
   {
     "slug": "rag-langchain-lab",
@@ -213,7 +213,7 @@
     "slug": "CS-Networking",
     "column": "computer-science",
     "title": "搭建博客的过程让我重新学了一遍计网",
-    "date": "2025-12-18",
+    "date": "2025-12-17",
     "summary": "从域名注册到服务器部署，个人博客的搭建过程让我重新认识了计算机网络的基础知识。",
     "tags": ["Networking", "Blog Deployment"],
     "readingTime": "8 min",
@@ -223,10 +223,20 @@
     "slug": "IoT-Smart-Parking-System",
     "column": "chronos-heart",
     "title": "一种物联网智慧停车系统及其远程升级设计",
-    "date": "2025-12-19",
+    "date": "2025-12-18",
     "summary": "基于物联网的智慧停车系统得到了广泛的应用，可以实时探测车位的车辆是否被占用，并显示剩余车辆数量。",
     "tags": ["IoT", "Smart Parking", "Remote Upgrade"],
     "readingTime": "8 min",
     "status": "shipped"
+  },
+    {
+    "slug": "AI-report-detection",
+    "column": "beyond-sapien",
+    "title": "用AI写的报告是如何被发现的？",
+    "date": "2025-12-18",
+    "summary": "完美规避AIGC检测的AI写作存在吗？",
+    "tags": ["AI"],
+    "readingTime": "6 min",
+    "status": "building"
   }
 ]
