@@ -177,7 +177,7 @@
     "summary": "江河湖海，水系纵横。南京的水文地理与城市发展息息相关。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "building"
+    "status": "shipped"
   },
   {
     "slug": "freedom-and-fairness",
@@ -187,11 +187,11 @@
     "summary": "左和右的分野背后，是自由与公平两种价值尺度冲撞后的无奈。",
     "tags": ["Humanism", "Society"],
     "readingTime": "8 min",
-    "status": "building"
+    "status": "shipped"
   },
   {
     "slug": "marking-territory",
-    "column": "civic-prism",
+    "column": "nonsense",
     "title": "开服纪念：在赛博空间标记了一片领地",
     "date": "2025-12-16",
     "summary": "从Nov23到Dec16，历时23天完成了个人博客主页从无到有的搭建。",
@@ -236,6 +236,26 @@
     "date": "2025-12-18",
     "summary": "完美规避AIGC检测的AI写作存在吗？",
     "tags": ["AI"],
+    "readingTime": "6 min",
+    "status": "building"
+  },
+    {
+    "slug": "twenty",
+    "column": "nonsense",
+    "title": "记廿：写在20岁的最后一天",
+    "date": "2025-12-26",
+    "summary": "Once I was twenty years old.",
+    "tags": ["Personal", "Growth"],
+    "readingTime": "6 min",
+    "status": "shipped"
+  },
+  {
+    "slug": "hi-chromeos",
+    "column": "computer-science",
+    "title": "你好，ChromeOS！",
+    "date": "2025-12-26",
+    "summary": "买了一台15.6寸4K屏幕的Chromebook，目前为止的使用体验如何？",
+    "tags": ["ChromeOS", "Laptop"],
     "readingTime": "6 min",
     "status": "building"
   }

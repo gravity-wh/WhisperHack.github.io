@@ -118,6 +118,17 @@
     "description": "建议计组、计网、操作系统纳入义务教育。",
     "tagline": "让计算机科学成为全民必修课",
     "folder": "computer-science"
+  },
+  {
+    "id": "nonsense",
+    "name": "呓语痴人",
+    "englishTag": "NONSENSE",
+    "frequency": 101.5,
+    "categories": ["dairy"],
+    "emoji": "💭",
+    "description": "记录生活中的奇思妙想与随笔感悟。",
+    "tagline": "在梦境与现实间漫游",
+    "folder": "nonsense"
   }
   
 
