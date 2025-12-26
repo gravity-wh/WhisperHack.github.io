@@ -842,6 +842,8 @@ function createCard(post) {
   const badgeIcon = program?.emoji || categoryIcon;
   const frequency = program?.dialLabel || post.frequency || "--";
   const programSuffix = program?.englishTag ? `<span class="sr-card__tag">${program.englishTag}</span>` : "";
+
+  const postUrl = buildPostUrl(post);
   return `
     <article class="sr-card">
       <div class="sr-card__top">
@@ -854,10 +856,22 @@ function createCard(post) {
       </div>
       <div class="sr-card__meta">
         <span>${formatDate(post.date)} · ${post.readingTime || "--"}</span>
-        <a class="sr-card__link" href="posts/post.html?slug=${post.slug}">阅读全文 →</a>
+        <a class="sr-card__link" href="${postUrl}">阅读全文 →</a>
       </div>
     </article>
   `;
+}
+
+function buildPostUrl(post) {
+  const url = new URL("http://local.invalid/posts/post.html");
+  url.searchParams.set("slug", post.slug);
+  if (post.column) url.searchParams.set("column", post.column);
+  if (post.title) url.searchParams.set("title", post.title);
+  if (post.date) url.searchParams.set("date", post.date);
+  if (Array.isArray(post.tags) && post.tags.length) url.searchParams.set("tags", post.tags.join(","));
+  if (post.readingTime) url.searchParams.set("readingTime", post.readingTime);
+  if (post.status) url.searchParams.set("status", post.status);
+  return `posts/post.html?${url.searchParams.toString()}`;
 }
 
 function decoratePostsWithPrograms(posts) {

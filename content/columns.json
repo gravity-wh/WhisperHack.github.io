@@ -19,7 +19,7 @@
     "category": "travel",
     "categories": ["travel"],
     "emoji": "🌿",
-    "description": "把旅途中的自然与人文温度，变成随风起伏的短波。",
+    "description": "年少的心总有些轻狂如今你四海为家。",
     "tagline": "携风出走，向山海问路",
     "folder": "endless-steps"
   },
@@ -43,8 +43,8 @@
     "category": "guitar",
     "categories": ["guitar"],
     "emoji": "🎧",
-    "description": "分享音乐创作与吉他实验，把旋律拆成可重复的模组。",
-    "tagline": "在频谱里拼出情绪",
+    "description": "doremifasolasi。",
+    "tagline": "无关风月，我题序等你回",
     "folder": "sonic-fragments"
   },
   {
@@ -55,8 +55,8 @@
     "category": "reading",
     "categories": ["reading"],
     "emoji": "📚",
-    "description": "以阅读拆解世界，在纸页与现实间来回校准。",
-    "tagline": "在文字旁注记人生",
+    "description": "",
+    "tagline": "标注了一处待办",
     "folder": "between-lines"
   },
   {
@@ -67,8 +67,8 @@
     "category": "fin-tech",
     "categories": ["fin-tech"],
     "emoji": "💹",
-    "description": "记录金融科技、资本市场与加密叙事的波动，推演长期技术周期。",
-    "tagline": "在市场噪声里校准信号",
+    "description": "分享对科技的理解看法思考预测。",
+    "tagline": "在噪声里校准信号",
     "folder": "all-counterpoise"
   },
   {
@@ -91,7 +91,7 @@
     "category": "food",
     "categories": ["food"],
     "emoji": "🍽️",
-    "description": "探索美食的艺术与科学，品味每一道佳肴背后的故事。",
+    "description": "这是一档美食节目",
     "tagline": "在味蕾上谱写美味乐章",
     "folder": "tasty-food"
   },
@@ -104,7 +104,7 @@
     "categories": ["humanism"],
     "emoji": "🌊",
     "description": "探讨人文与社会议题，捕捉时代的脉动与变迁。",
-    "tagline": "在时代浪潮中寻找方向",
+    "tagline": "鉴证",
     "folder": "civic-prism"
   },
   {

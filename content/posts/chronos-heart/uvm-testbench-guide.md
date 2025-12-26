@@ -1,6 +1,6 @@
 # UVM 环境搭建：从 Hello World 到 完整 Testbench
 
-面向第一次写 UVM 的同学，我把搭建流程拆成三层：
+搭建流程可以拆成三层：
 
 1. **Hello World**：只有 Sequencer、Driver、Monitor，确保 TLM 通道和虚接口打通。
 2. **可复用 Agent**：加入配置对象 + Analysis Port，让 Scoreboard 能订阅事务流。

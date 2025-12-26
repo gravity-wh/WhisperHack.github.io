@@ -1,6 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("slug");
 const isDebug = params.get("debug") === "1";
+const columnFromQuery = params.get("column");
 
 const titleEl = document.getElementById("post-title");
 const dateEl = document.getElementById("post-date");
@@ -9,25 +10,14 @@ const readingEl = document.getElementById("post-reading");
 const statusEl = document.getElementById("post-phase"); // Reusing phase element for status
 const contentEl = document.getElementById("post-content");
 
+let markedApi = null;
+
 /**
  * Error Codes:
  * E001: Missing slug parameter
- * E002: Failed to fetch posts.json
- * E003: Post metadata not found
  * E004: Failed to fetch Markdown file
  * E005: Markdown content empty
  */
-
-const MATH_RENDER_OPTIONS = {
-	delimiters: [
-		{ left: "$$", right: "$$", display: true },
-		{ left: "\\[", right: "\\]", display: true },
-		{ left: "\\(", right: "\\)", display: false },
-		{ left: "$", right: "$", display: false }
-	],
-	throwOnError: false,
-	strict: "ignore"
-};
 
 init();
 
@@ -40,25 +30,23 @@ async function init() {
 	}
 
 	try {
-		const metaUrl = buildAssetUrl("../content/posts.json", { v: Date.now() });
-		if (isDebug) console.log("Fetching metadata from:", metaUrl);
-		
-		const metaRes = await fetch(metaUrl, { cache: "no-store" });
-		if (!metaRes.ok) {
-			throw new Error(`无法加载 posts.json (HTTP ${metaRes.status})`, { cause: "E002" });
+		await ensureMarkedReady();
+
+		const postMeta = readMetaFromQuery();
+		if (postMeta.title) {
+			hydrateMeta(postMeta);
+		} else {
+			document.title = `${slug} · WhisperHack`;
+			titleEl.textContent = slug;
+			tagsEl.textContent = "";
+			readingEl.textContent = "--";
+			dateEl.textContent = "--";
+			if (statusEl) {
+				statusEl.textContent = "";
+			}
 		}
-		
-		const meta = await metaRes.json();
-		const postMeta = meta.find((item) => item.slug === slug);
 
-		if (!postMeta) {
-			throw new Error(`未找到 slug 为 "${slug}" 的文章元数据`, { cause: "E003" });
-		}
-
-		if (isDebug) console.log("Post metadata found:", postMeta);
-
-		hydrateMeta(postMeta);
-		await renderMarkdown(postMeta);
+		await renderMarkdown({ slug, column: postMeta.column || columnFromQuery });
 		
 	} catch (error) {
 		console.error("Post Load Error:", error);
@@ -69,13 +57,173 @@ async function init() {
 	}
 }
 
-function buildAssetUrl(pathname, query = {}) {
-	const url = new URL(pathname, document.baseURI);
-	Object.entries(query).forEach(([key, value]) => {
-		if (value === undefined || value === null) return;
-		url.searchParams.set(key, String(value));
-	});
-	return url.toString();
+function readMetaFromQuery() {
+	const title = params.get("title") || "";
+	const date = params.get("date") || "";
+	const tagsRaw = params.get("tags") || "";
+	const readingTime = params.get("readingTime") || "";
+	const status = params.get("status") || "";
+	const column = params.get("column") || "";
+	const tags = tagsRaw ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean) : [];
+	return { slug, column, title, date, tags, readingTime, status };
+}
+
+async function ensureMarkedReady() {
+	if (markedApi) return markedApi;
+
+	if (!window.marked) {
+		throw new Error("Markdown 解析器 (marked.js) 未加载", { cause: "E006" });
+	}
+	markedApi = window.marked;
+	configureMarked(markedApi);
+	return markedApi;
+}
+
+function configureMarked(api) {
+	// Some builds expose functions directly; others expose an object
+	const hasUse = typeof api?.use === "function";
+	const hasSetOptions = typeof api?.setOptions === "function";
+
+	if (hasSetOptions) {
+		api.setOptions({
+			gfm: true,
+			breaks: false,
+			mangle: false,
+			headerIds: false
+		});
+	}
+
+	if (hasUse) {
+		api.use({ extensions: buildLatexExtensions() });
+	}
+}
+
+function buildLatexExtensions() {
+	// Goal: preserve LaTeX content so Markdown emphasis doesn't break things like $a_b$.
+	// Render with KaTeX if available; otherwise keep raw delimiters for auto-render.
+
+	return [
+		{
+			name: "latexBlockDollar",
+			level: "block",
+			start(src) {
+				return src.match(/(^|\n)\s*\$\$/)?.index;
+			},
+			tokenizer(src) {
+				const match = src.match(/^\s*\$\$([\s\S]+?)\$\$\s*(\n+|$)/);
+				if (!match) return;
+				return {
+					type: "latexBlockDollar",
+					raw: match[0],
+					text: match[1]
+				};
+			},
+			renderer(token) {
+				return renderLatex(token.text, true);
+			}
+		},
+		{
+			name: "latexBlockBracket",
+			level: "block",
+			start(src) {
+				return src.indexOf("\\[");
+			},
+			tokenizer(src) {
+				const match = src.match(/^\s*\\\[([\s\S]+?)\\\]\s*(\n+|$)/);
+				if (!match) return;
+				return {
+					type: "latexBlockBracket",
+					raw: match[0],
+					text: match[1]
+				};
+			},
+			renderer(token) {
+				return renderLatex(token.text, true);
+			}
+		},
+		{
+			name: "latexInlineParen",
+			level: "inline",
+			start(src) {
+				return src.indexOf("\\(");
+			},
+			tokenizer(src) {
+				if (!src.startsWith("\\(")) return;
+				const end = src.indexOf("\\)", 2);
+				if (end === -1) return;
+				const raw = src.slice(0, end + 2);
+				const text = src.slice(2, end);
+				return { type: "latexInlineParen", raw, text };
+			},
+			renderer(token) {
+				return renderLatex(token.text, false);
+			}
+		},
+		{
+			name: "latexInlineDollar",
+			level: "inline",
+			start(src) {
+				return src.indexOf("$");
+			},
+			tokenizer(src) {
+				if (!src.startsWith("$")) return;
+				if (src.startsWith("$$")) return;
+				// Scan for the next unescaped '$'
+				let i = 1;
+				while (i < src.length) {
+					const ch = src[i];
+					if (ch === "\n") return;
+					if (ch === "$") {
+						// treat '\\$' as escaped
+						let backslashes = 0;
+						let k = i - 1;
+						while (k >= 0 && src[k] === "\\") {
+							backslashes++;
+							k--;
+						}
+						if (backslashes % 2 === 0) {
+							const raw = src.slice(0, i + 1);
+							const text = src.slice(1, i);
+							if (!text.trim()) return;
+							return { type: "latexInlineDollar", raw, text };
+						}
+					}
+					i++;
+				}
+				return;
+			},
+			renderer(token) {
+				return renderLatex(token.text, false);
+			}
+		}
+	];
+}
+
+function renderLatex(latex, displayMode) {
+	const text = (latex || "").trim();
+	if (!text) return "";
+	if (window.katex && typeof window.katex.renderToString === "function") {
+		try {
+			return window.katex.renderToString(text, {
+				displayMode,
+				throwOnError: false,
+				strict: "ignore"
+			});
+		} catch (e) {
+			// Fall through to raw delimiters
+		}
+	}
+	const raw = displayMode ? `$$${text}$$` : `$${text}$`;
+	return `<span class="katex-math">${escapeHtml(raw)}</span>`;
+}
+
+function escapeHtml(value) {
+	return String(value)
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+		.replaceAll("'", "&#39;");
 }
 
 function hydrateMeta(postMeta) {
@@ -95,23 +243,21 @@ async function renderMarkdown(postMeta) {
 	const column = postMeta.column;
 	const slugValue = postMeta.slug;
 	
-	// Try column-based path first
-	const paths = [];
-	if (column) {
-		paths.push(`../content/posts/${column}/${slugValue}.md`);
-	}
-	paths.push(`../content/posts/${slugValue}.md`);
+	// Minimal: use explicit column path when available; fallback to legacy flat path.
+	const paths = column
+		? [`../content/posts/${column}/${slugValue}.md`, `../content/posts/${slugValue}.md`]
+		: [`../content/posts/${slugValue}.md`];
 
 	let response = null;
 	let lastError = null;
 	let successfulPath = null;
 
 	for (const path of paths) {
-		const url = buildAssetUrl(path, { v: Date.now() });
+		const url = new URL(path, document.baseURI).toString();
 		if (isDebug) console.log("Attempting to fetch Markdown from:", url);
 		
 		try {
-			const res = await fetch(url, { cache: "no-store" });
+			const res = await fetch(url);
 			if (res.ok) {
 				response = res;
 				successfulPath = path;
@@ -134,18 +280,10 @@ async function renderMarkdown(postMeta) {
 		throw new Error("文章内容为空", { cause: "E005" });
 	}
 
-	if (typeof window.marked === "undefined") {
-		throw new Error("Markdown 解析器 (marked.js) 未加载", { cause: "E006" });
-	}
-
-	const html = typeof window.marked.parse === "function" 
-		? window.marked.parse(markdown) 
-		: window.marked(markdown);
+	const api = await ensureMarkedReady();
+	const html = typeof api?.parse === "function" ? api.parse(markdown) : api(markdown);
 		
 	contentEl.innerHTML = html;
-	
-	queueMathRender();
-	renderAbcBlocks();
 }
 
 function renderFallback(message, code = "") {
@@ -165,41 +303,3 @@ function formatDate(value) {
 	return new Date(value).toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
 }
 
-function queueMathRender(attempt = 0) {
-	if (!contentEl) return;
-	if (typeof window.renderMathInElement === "function") {
-		renderMathInElement(contentEl, MATH_RENDER_OPTIONS);
-		return;
-	}
-	if (attempt > 20) return;
-	setTimeout(() => queueMathRender(attempt + 1), 100);
-}
-
-function renderAbcBlocks(attempt = 0) {
-	if (!contentEl) return;
-	const selector = 'pre code.language-abc, pre code.language-abcjs, code.language-abc, code.language-abcjs';
-	const nodes = Array.from(contentEl.querySelectorAll(selector));
-	if (!nodes.length) return;
-	const ready = typeof window.ABCJS !== "undefined" && typeof window.ABCJS.renderAbc === "function";
-	if (!ready) {
-		if (attempt > 30) return;
-		setTimeout(() => renderAbcBlocks(attempt + 1), 200);
-		return;
-	}
-	nodes.forEach((code) => {
-		const abcText = code.textContent || code.innerText || "";
-		const pre = code.closest("pre");
-		const container = document.createElement("div");
-		container.className = "abcjs-score";
-		if (pre && pre.parentNode) {
-			pre.parentNode.replaceChild(container, pre);
-		} else if (code.parentNode) {
-			code.parentNode.replaceChild(container, code);
-		}
-		try {
-			window.ABCJS.renderAbc(container, abcText, { responsive: "resize" });
-		} catch (err) {
-			container.textContent = abcText;
-		}
-	});
-}

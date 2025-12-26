@@ -57,7 +57,7 @@
     "summary": "环宁皆山也。从方山到牛首山，记录穿行于南京群山的点滴。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "rag-langchain-lab",
@@ -177,7 +177,7 @@
     "summary": "江河湖海，水系纵横。南京的水文地理与城市发展息息相关。",
     "tags": ["旅途", "随笔"],
     "readingTime": "8 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "freedom-and-fairness",
@@ -187,14 +187,14 @@
     "summary": "左和右的分野背后，是自由与公平两种价值尺度冲撞后的无奈。",
     "tags": ["Humanism", "Society"],
     "readingTime": "8 min",
-    "status": "shipped"
+    "status": "building"
   },
   {
     "slug": "marking-territory",
     "column": "nonsense",
     "title": "开服纪念：在赛博空间标记了一片领地",
     "date": "2025-12-16",
-    "summary": "从Nov23到Dec16，历时23天完成了个人博客主页从无到有的搭建。",
+    "summary": "从11/23到12/16，历时23天完成了个人博客主页从mkdir到ISP备案的全过程。",
     "tags": ["Blog", "Personal Website"],
     "readingTime": "8 min",
     "status": "shipped"
@@ -204,7 +204,7 @@
     "column": "computer-science",
     "title": "Git 是如何工作的？",
     "date": "2025-12-17",
-    "summary": "最近看到了很多关于Git的Meme，开始意识到版本控制并非想象中那么简单。",
+    "summary": "最近看到了很多关于Git的Meme，是时候整理一下有关版本控制的知识了。",
     "tags": ["Git", "Version Control"],
     "readingTime": "8 min",
     "status": "shipped"
@@ -244,7 +244,7 @@
     "column": "nonsense",
     "title": "记廿：写在20岁的最后一天",
     "date": "2025-12-26",
-    "summary": "Once I was twenty years old.",
+    "summary": "Once I was twenty years old, I was writing about everything, I saw before me.",
     "tags": ["Personal", "Growth"],
     "readingTime": "6 min",
     "status": "shipped"
@@ -253,10 +253,10 @@
     "slug": "hi-chromeos",
     "column": "computer-science",
     "title": "你好，ChromeOS！",
-    "date": "2025-12-26",
+    "date": "2025-12-24",
     "summary": "买了一台15.6寸4K屏幕的Chromebook，目前为止的使用体验如何？",
     "tags": ["ChromeOS", "Laptop"],
     "readingTime": "6 min",
-    "status": "building"
+    "status": "shipped"
   }
 ]
